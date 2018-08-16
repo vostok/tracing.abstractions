@@ -1,0 +1,17 @@
+notests *default:
+  build:
+    target: Vostok.Tracing.Abstractions.sln
+    configuration: NoTests
+    tool:
+      name: dotnet
+
+  install:
+    - Vostok.Tracing.Abstractions/bin/Release/netstandard2.0/Vostok.Tracing.Abstractions.dll
+
+  deps:
+    - vostok.devtools
+
+full-build > notests:
+  build:
+    target: Vostok.Tracing.Abstractions.sln
+    configuration: Release
