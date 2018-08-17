@@ -5,11 +5,11 @@ namespace Vostok.Tracing.Abstractions
 {
     public interface ISpan
     {
-        Guid TraceId { get; set; }
-        Guid SpanId { get; set; }
-        Guid? ParentSpanId { get; set; }
-        DateTimeOffset BeginTimestamp { get; set; }
-        DateTimeOffset? EndTimestamp { get; set; }
-        IDictionary<string, string> Annotations { get; set; }
+        Guid TraceId { get; }
+        Guid SpanId { get; }
+        Guid? ParentSpanId { get; }
+        DateTimeOffset BeginTimestamp { get; }
+        DateTimeOffset? EndTimestamp { get; }
+        IReadOnlyDictionary<string, string> Annotations { get; }
     }
 }
