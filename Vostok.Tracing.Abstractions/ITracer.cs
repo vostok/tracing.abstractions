@@ -2,7 +2,7 @@
 {
     public interface ITracer
     {
-        ITraceContext CurrentContext { get; set; }
+        TraceContext CurrentContext { get; set; }
 
         ISpanBuilder BeginSpan();
     }
