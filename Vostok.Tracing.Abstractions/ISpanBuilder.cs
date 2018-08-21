@@ -6,7 +6,7 @@ namespace Vostok.Tracing.Abstractions
     {
         bool IsEndless { get; set; }
 
-        void SetAnnotation<TValue>(string key, TValue value, bool copyToChild = false);
+        void SetAnnotation<TValue>(string key, TValue value);
         void SetBeginTimestamp(DateTimeOffset timestamp);
         void SetEndTimestamp(DateTimeOffset timestamp);
     }

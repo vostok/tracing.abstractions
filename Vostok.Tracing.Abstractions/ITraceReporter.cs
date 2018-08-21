@@ -2,6 +2,6 @@
 {
     public interface ITraceReporter
     {
-        void SendSpan(ISpan span);
+        SpanSendResult SendSpan(ISpan span);
     }
 }
