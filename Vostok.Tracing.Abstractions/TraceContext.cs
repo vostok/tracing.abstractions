@@ -16,6 +16,7 @@ namespace Vostok.Tracing.Abstractions
         public Guid TraceId { get; }
         public Guid SpanId { get; }
 
+        // CR(iloktionov): Remove this from public API.
         public IDictionary<string, string> InheritAnnotations { get;  }
 
         public void AddToInheritAnnotations(string key, string value)
