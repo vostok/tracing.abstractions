@@ -2,7 +2,7 @@
 {
     public enum SpanSendResult
     {
-        Sended,
+        Send,
         InQueue,
         Error
     }
