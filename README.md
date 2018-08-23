@@ -44,6 +44,7 @@ Normilized url - short url without scheme, host, query. Replaced segments that a
 ## HTTP client (cluster)
 
 Performing http-request using cluster library. Describes operation for obtaining data using replicas
+
 | Name | Description | Default value |
 |----|-----|----|
 | kind |  | http-request-cluster |
@@ -60,6 +61,7 @@ Performing http-request using cluster library. Describes operation for obtaining
 ## HTTP server
 
 Handle http request by server
+
 | Name | Description | Default value |
 |----|-----|----|
 | kind |  | http-request-server |
@@ -76,6 +78,7 @@ Handle http request by server
 ## Database
 
 Perform query to database
+
 | Name | Description | Default value |
 |----|-----|----|
 | kind |  | db-request |
@@ -87,6 +90,7 @@ Perform query to database
 ## Queue (producer)
 
 Insert task to queue
+
 | Name | Description | Default value |
 |----|-----|----|
 | kind |  | queue-producer |
@@ -100,6 +104,7 @@ Insert task to queue
 ## Queue (task-lifecycle)
 
 Root span for processing task. Contains general task description
+
 | Name | Description | Default value |
 |----|-----|----|
 | kind |  | queue-task-lifecycle |
@@ -110,6 +115,7 @@ Root span for processing task. Contains general task description
 ## Queue (task-lifecycle-event)
 
 Describes event by processing task. Usually with empty duration
+
 | Name | Description | Default value |
 |----|-----|----|
 | kind |  | queue-task-lifecycle-event |
@@ -120,6 +126,7 @@ Describes event by processing task. Usually with empty duration
 ## Queue (manager)
 
 Change state task operation
+
 | Name | Description | Default value |
 |----|-----|----|
 | kind |  | queue-manager |
@@ -132,6 +139,7 @@ Change state task operation
 ## Queue (consumer)
 
 Describes processing task operation
+
 | Name | Description | Default value |
 |----|-----|----|
 | kind |  | queue-consumer |
@@ -161,7 +169,7 @@ Tracing a queue task is a collection of events that occurred within the lifecycl
 
 Since the interaction with the queue broker occurs via http api, the http call spans are stored in the process trace. 
 
-![General queue tracing scheme](docs/images/Echelon.jpg)
+![General queue tracing scheme](docs/images/echelon.jpg)
 
 ## Tracing queues without a broker or without access to the source code of the broker
 Broker's trace actions are performed by a process that works with the task
