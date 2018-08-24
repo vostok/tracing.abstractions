@@ -34,11 +34,12 @@ namespace Vostok.Tracing.Abstractions
         /// <summary>
         /// The end timestamp of trace. Represents the time when the span was end. The local time zone is kept here for future use. 
         /// </summary>
+        [CanBeNull]
         DateTimeOffset? EndTimestamp { get; }
 
         /// <summary>
         /// Contains various user-defined annotations.
         /// </summary>
-        [CanBeNull]IReadOnlyDictionary<string, string> Annotations { get; }
+        [NotNull]IReadOnlyDictionary<string, string> Annotations { get; }
     }
 }
