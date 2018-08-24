@@ -21,7 +21,7 @@ namespace Vostok.Tracing.Abstractions.Tests
         }
 
         [Test]
-        public void WithAnnotation_should_return_a_tracer_that_setted_given_annotation_when_value_is_not_null()
+        public void WithAnnotation_should_return_a_tracer_that_added_annotation_when_value_is_not_null()
         {
             enrichTracer = baseTracer.WithAnnotation("key1", "value1");
 
@@ -31,7 +31,7 @@ namespace Vostok.Tracing.Abstractions.Tests
         }
 
         [Test]
-        public void WithAnnotation_should_return_a_tracer_that_setted_given_annotation_when_value_is_null_and_allowNull()
+        public void WithAnnotation_should_return_a_tracer_that_added_annotation_when_value_is_null_and_allowNull()
         {
             enrichTracer = baseTracer.WithAnnotation("key1", () => null as string, false, true);
 
@@ -41,7 +41,7 @@ namespace Vostok.Tracing.Abstractions.Tests
         }
 
         [Test]
-        public void WithAnnotation_should_return_a_tracer_that_not_setted_given_annotation_when_value_is_null_and_not_allowNull()
+        public void WithAnnotation_should_return_a_tracer_that_not_added_annotation_when_value_is_null_and_not_allowNull()
         {
             enrichTracer = baseTracer.WithAnnotation("key1", () => null as string);
 
@@ -63,7 +63,7 @@ namespace Vostok.Tracing.Abstractions.Tests
         }
 
         [Test]
-        public void WithAnnotations_should_return_a_tracer_that_setted_given_annotations()
+        public void WithAnnotations_should_return_a_tracer_that_added_annotations()
         {
             enrichTracer = baseTracer.WithAnnotations(
                 new Dictionary<string, string>

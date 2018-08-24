@@ -3,10 +3,8 @@
 namespace Vostok.Tracing.Abstractions
 {
     [PublicAPI]
-    public enum SpanSendResult
+    public interface ISpanSender
     {
-        Sent,
-        Queued,
-        Failed
+        SpanSendResult Send([NotNull]ISpan span);
     }
 }

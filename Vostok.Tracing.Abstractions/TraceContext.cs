@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Vostok.Tracing.Abstractions
 {
+    [PublicAPI]
     public class TraceContext
     {
         public TraceContext(Guid traceId, Guid spanId)

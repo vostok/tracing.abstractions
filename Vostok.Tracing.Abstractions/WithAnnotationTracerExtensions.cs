@@ -9,27 +9,27 @@ namespace Vostok.Tracing.Abstractions
     public static class WithAnnotationTracerExtensions
     {
         [Pure]
-        public static ITracer WithAnnotation(this ITracer tracer, string key, string value, bool allowOverwrite = false)
+        public static ITracer WithAnnotation(this ITracer tracer, [NotNull] string key, [CanBeNull] string value, bool allowOverwrite = false)
         {
             return new WithAnnotationTracer(tracer, key, () => value, allowOverwrite, true);
         }
 
         [Pure]
-        public static ITracer WithAnnotation(this ITracer tracer, string key, Func<string> value, bool allowOverwrite = false, bool allowNullValues = false)
+        public static ITracer WithAnnotation(this ITracer tracer, [NotNull]string key, [NotNull]Func<string> value, bool allowOverwrite = false, bool allowNullValues = false)
         {
             return new WithAnnotationTracer(tracer, key, value, allowOverwrite, allowNullValues);
         }
 
         [Pure]
-        public static ITracer WithAnnotations(this ITracer tracer, IReadOnlyDictionary<string, string> properties, bool allowOverwrite = false, bool allowNullValues = false)
+        public static ITracer WithAnnotations(this ITracer tracer, [NotNull]IReadOnlyDictionary<string, string> annotations, bool allowOverwrite = false, bool allowNullValues = false)
         {
-            return new WithAnnotationsTracer(tracer, () => properties?.Select(pair => (pair.Key, pair.Value)), allowOverwrite, allowNullValues);
+            return new WithAnnotationsTracer(tracer, () => annotations?.Select(pair => (pair.Key, pair.Value)), allowOverwrite, allowNullValues);
         }
 
         [Pure]
-        public static ITracer WithAnnotations(this ITracer tracer, Func<IEnumerable<(string, string)>> properties, bool allowOverwrite = false, bool allowNullValues = false)
+        public static ITracer WithAnnotations(this ITracer tracer, [NotNull]Func<IEnumerable<(string, string)>> annotations, bool allowOverwrite = false, bool allowNullValues = false)
         {
-            return new WithAnnotationsTracer(tracer, properties, allowOverwrite, allowNullValues);
+            return new WithAnnotationsTracer(tracer, annotations, allowOverwrite, allowNullValues);
         }
 
         private class WithAnnotationTracer : ITracer
@@ -44,7 +44,7 @@ namespace Vostok.Tracing.Abstractions
             {
                 this.baseTracer = baseTracer ?? throw new ArgumentNullException(nameof(baseTracer));
                 this.key = key ?? throw new ArgumentNullException(nameof(key));
-                this.value = value;
+                this.value = value ?? throw new ArgumentNullException(nameof(value));
                 this.allowOverwrite = allowOverwrite;
                 this.allowNullValues = allowNullValues;
             }
@@ -57,29 +57,29 @@ namespace Vostok.Tracing.Abstractions
 
             public ISpanBuilder BeginSpan()
             {
-                var span = baseTracer.BeginSpan();
+                var spanBuilder = baseTracer.BeginSpan();
 
                 var valueObject = value();
                 if (valueObject != null || allowNullValues)
                 {
-                    span.SetAnnotation(key, valueObject, allowOverwrite);
+                    spanBuilder.SetAnnotation(key, valueObject, allowOverwrite);
                 }
 
-                return span;
+                return spanBuilder;
             }
         }
 
         private class WithAnnotationsTracer : ITracer
         {
             private readonly ITracer baseTracer;
-            private readonly Func<IEnumerable<(string, string)>> propertiesProvider;
+            private readonly Func<IEnumerable<(string, string)>> annotationsProvider;
             private readonly bool allowOverwrite;
             private readonly bool allowNullValues;
 
-            public WithAnnotationsTracer(ITracer baseTracer, Func<IEnumerable<(string, string)>> propertiesProvider, bool allowOverwrite, bool allowNullValues)
+            public WithAnnotationsTracer(ITracer baseTracer, Func<IEnumerable<(string, string)>> annotationsProvider, bool allowOverwrite, bool allowNullValues)
             {
                 this.baseTracer = baseTracer ?? throw new ArgumentNullException(nameof(baseTracer));
-                this.propertiesProvider = propertiesProvider ?? throw new ArgumentNullException(nameof(propertiesProvider));
+                this.annotationsProvider = annotationsProvider ?? throw new ArgumentNullException(nameof(annotationsProvider));
                 this.allowOverwrite = allowOverwrite;
                 this.allowNullValues = allowNullValues;
             }
@@ -92,17 +92,17 @@ namespace Vostok.Tracing.Abstractions
 
             public ISpanBuilder BeginSpan()
             {
-                var span = baseTracer.BeginSpan();
+                var spanBuilder = baseTracer.BeginSpan();
 
-                foreach (var (key, value) in propertiesProvider() ?? Enumerable.Empty<(string, string)>())
+                foreach (var (key, value) in annotationsProvider() ?? Enumerable.Empty<(string, string)>())
                 {
                     if (!allowNullValues && value == null)
                         continue;
 
-                    span.SetAnnotation(key, value, allowOverwrite);
+                    spanBuilder.SetAnnotation(key, value, allowOverwrite);
                 }
 
-                return span;
+                return spanBuilder;
             }
         }
     }
