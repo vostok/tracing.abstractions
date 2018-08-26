@@ -19,14 +19,14 @@ namespace Vostok.Tracing.Abstractions
             {
                 public const string Method = HttpPrefix + RequestPrefix + "method";
                 public const string Url = HttpPrefix + RequestPrefix + "url";
-                public const string Size = HttpPrefix + RequestPrefix + "content-length";
+                public const string Size = HttpPrefix + RequestPrefix + "contentLength";
                 private const string RequestPrefix = "request.";
             }
 
             public static class Response
             {
-                public const string Code = HttpPrefix + ResponsePrefix + "status-code";
-                public const string Size = HttpPrefix + ResponsePrefix + "content-length";
+                public const string Code = HttpPrefix + ResponsePrefix + "statusCode";
+                public const string Size = HttpPrefix + ResponsePrefix + "contentLength";
                 private const string ResponsePrefix = "response.";
             }
 
@@ -42,23 +42,23 @@ namespace Vostok.Tracing.Abstractions
         {
             public const string Type = QueuePrefix + "type";
             public const string Topic = QueuePrefix + "topic";
-            public const string ActionResult = QueuePrefix + "action-result";
-            public const string TaskId = QueuePrefix + "task-id";
-            public const string TaskTraceId = QueuePrefix + "task-trace-id";
-            public const string ExecutionResult = QueuePrefix + "execution-result";
+            public const string ActionResult = QueuePrefix + "actionResult";
+            public const string TaskId = QueuePrefix + "taskId";
+            public const string TaskTraceId = QueuePrefix + "taskTraceId";
+            public const string ExecutionResult = QueuePrefix + "executionResult";
             private const string QueuePrefix = "queue.";
 
             public static class Source
             {
-                public const string TraceId = QueuePrefix + SourcePrefix +  "trace-id";
-                public const string SpanId = QueuePrefix + SourcePrefix + "span-id";
+                public const string TraceId = QueuePrefix + SourcePrefix +  "traceId";
+                public const string SpanId = QueuePrefix + SourcePrefix + "spanId";
                 private const string SourcePrefix = "source.";
             }
         }
 
         public static class Cluster
         {
-            public const string Strategy = ClusterPrefix+ "request-strategy";
+            public const string Strategy = ClusterPrefix+ "requestStrategy";
             public const string Status = ClusterPrefix + "status";
             private const string ClusterPrefix = "cluster.";
         }
@@ -66,7 +66,7 @@ namespace Vostok.Tracing.Abstractions
         public static class Database
         {
             public const string Type = DbPrefix + "type";
-            public const string ExecutionResult = DbPrefix + "execution-result";
+            public const string ExecutionResult = DbPrefix + "executionResult";
             public const string Instance = DbPrefix + "instance";
             private const string DbPrefix = "db.";
         }
