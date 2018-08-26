@@ -35,9 +35,9 @@ Performing http-request directly to url
 | service | Microservice name to which the request is made. Set manually or inherit from parent |  |
 | http.request.method | http request method (GET, POST, PUT, DELETE, etc) |  |
 | http.request.url | url without parameters  |  |
-| http.request.content-length | request body size in bytes |  |
-| http.response.status-code | http response code status |  |
-| http.response.content-length | response body size in bytes |  |
+| http.request.contentLength | request body size in bytes |  |
+| http.response.statusCode | http response code status |  |
+| http.response.contentLength | response body size in bytes |  |
 
 Normilized url - short url without scheme, host, query. Replaced segments that are not valuable for the identification of the operation (for example, id entities, search queries, hex)
 
@@ -50,13 +50,13 @@ Performing http-request using cluster library. Describes operation for obtaining
 | kind |  | http-request-cluster |
 | operation |  | {http.request.method}): {normilized http.request.url}. Example: (POST): /page/{num}/process  |
 | service | Microservice name to which the request is made. Set to child spans |  |
-| cluster.request-strategy | request strategy |  |
+| cluster.requestStrategy | request strategy |  |
 | cluster.status | status performig request using cluster  |  |
 | http.request.method | http request method (GET, POST, PUT, DELETE, etc) |  |
 | http.request.url | url without parameters  |  |
-| http.request.content-length | request body size in bytes |  |
-| http.response.status-code | http response code status |  |
-| http.response.content-length | response body size in bytes |  |
+| http.request.contentLength | request body size in bytes |  |
+| http.response.statusCode | http response code status |  |
+| http.response.contentLength | response body size in bytes |  |
 
 ## HTTP server
 
@@ -71,9 +71,9 @@ Handle http request by server
 | http.client.address | http client address (ip address or host)  |  |
 | http.request.method | http request method (GET, POST, PUT, DELETE, etc) |  |
 | http.request.url | url without parameters  |  |
-| http.request.content-length | request body size in bytes |  |
-| http.response.status-code | http response code status |  |
-| http.response.content-length | response body size in bytes |  |
+| http.request.contentLength | request body size in bytes |  |
+| http.response.statusCode | http response code status |  |
+| http.response.contentLength | response body size in bytes |  |
 
 ## Database
 
@@ -84,7 +84,7 @@ Perform query to database
 | kind |  | db-request |
 | operation | Database operation name. For example, reading data from table X, execute stored procedure Y, insert data to table Z, etc  |  For example, Insert data to [dbo].[Tasks], Execute stored procedure [UpdateData] |
 | db.type | Database type (mssql, cassandra, red, etc) |  |
-| db.execution-result | Result of performing request to database |  |
+| db.executionResult | Result of performing request to database |  |
 | db.instance | (Usefull for MS SQL) Instanse database server |  |
 
 ## Queue (producer)
@@ -97,9 +97,9 @@ Insert task to queue
 | operation |  | ({queue.type}) Put to {queue.topic}. Example, (Echelon) Put to reports |
 | queue.type | Queue type (Echelon, RabbitMQ etc) |  |
 | queue.topic | Name of type, topic, thread of queue, which inserted task  |  |
-| queue.action-result | Result of action (in this case, insert to queue) |  |
-| queue.taskid | Recieved task id |  |
-| queue.task-traceid | Recieved task traceid |  |
+| queue.actionResult | Result of action (in this case, insert to queue) |  |
+| queue.taskId | Recieved task id |  |
+| queue.taskTraceId | Recieved task traceid |  |
 
 ## Queue (task-lifecycle)
 
@@ -110,7 +110,7 @@ Root span for processing task. Contains general task description
 | kind |  | queue-task-lifecycle |
 | queue.type | Queue type (Echelon, RabbitMQ etc) |  |
 | queue.topic | Name of type, topic, thread of queue |  |
-| queue.taskid | Processing task id |  |
+| queue.taskId | Processing task id |  |
 
 ## Queue (task-lifecycle-event)
 
@@ -120,8 +120,8 @@ Describes event by processing task. Usually with empty duration
 |----|-----|----|
 | kind |  | queue-task-lifecycle-event |
 | operation | Operation name (put task to queue, pass task to consumer, prolong, delete etc) |  |
-| queue.source.traceid | process TraceId  that trigger the event |  |
-| queue.source.spanid | process SpanId  that trigger the event |  |
+| queue.source.traceId | process TraceId  that trigger the event |  |
+| queue.source.spanId | process SpanId  that trigger the event |  |
 
 ## Queue (manager)
 
@@ -133,8 +133,8 @@ Change state task operation
 | operation | Operation name (delete, prolong, etc) |  |
 | queue.type | Queue type (Echelon, RabbitMQ etc) |  |
 | queue.topic | Name of type, topic, thread of queue  |  |
-| queue.taskid | Processing task id |  |
-| queue.action-result |  Result of action |  |
+| queue.taskId | Processing task id |  |
+| queue.actionResult |  Result of action |  |
 
 ## Queue (consumer)
 
@@ -143,7 +143,7 @@ Describes processing task operation
 | Name | Description | Default value |
 |----|-----|----|
 | kind |  | queue-consumer |
-| queue.execution-result | Result of processing |  |
+| queue.executionResult | Result of processing |  |
 
 ## Business logic
 
