@@ -4,7 +4,6 @@ Distributed tracing allows to reconstruct the history of the logical operation s
 
 Each kind of span stores specific information about performed action.
 
-Every trace has an identifier called `traceId`. 
 
 ## Span structure
 
