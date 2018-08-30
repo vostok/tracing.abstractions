@@ -17,24 +17,27 @@ namespace Vostok.Tracing.Abstractions
 
             public class Request
             {
-                public const string Method = HttpPrefix + RequestPrefix + "method";
-                public const string Url = HttpPrefix + RequestPrefix + "url";
-                public const string Size = HttpPrefix + RequestPrefix + "contentLength";
-                private const string RequestPrefix = "request.";
+                public const string Method = HttpRequestPrefix + "method";
+                public const string Url = HttpRequestPrefix + "url";
+                public const string Size = HttpRequestPrefix + "size";
+
+                private const string HttpRequestPrefix = HttpPrefix + "request.";
             }
 
             public static class Response
             {
-                public const string Code = HttpPrefix + ResponsePrefix + "statusCode";
-                public const string Size = HttpPrefix + ResponsePrefix + "contentLength";
-                private const string ResponsePrefix = "response.";
+                public const string Code = HttpResponsePrefix + "code";
+                public const string Size = HttpResponsePrefix + "size";
+
+                private const string HttpResponsePrefix = HttpPrefix + "response.";
             }
 
             public static class Client
             {
-                public const string Name = HttpPrefix + ClientPrefix + "name";
-                public const string Address = HttpPrefix + ClientPrefix + "address";
-                private const string ClientPrefix = "client.";
+                public const string Name = HttpClientPrefix + "name";
+                public const string Address = HttpClientPrefix + "address";
+
+                private const string HttpClientPrefix = HttpPrefix + "client.";
             }
         }
 
@@ -42,33 +45,37 @@ namespace Vostok.Tracing.Abstractions
         {
             public const string Type = QueuePrefix + "type";
             public const string Topic = QueuePrefix + "topic";
-            public const string ActionResult = QueuePrefix + "actionResult";
             public const string TaskId = QueuePrefix + "taskId";
             public const string TaskTraceId = QueuePrefix + "taskTraceId";
+            public const string ActionResult = QueuePrefix + "actionResult";
             public const string ExecutionResult = QueuePrefix + "executionResult";
+
             private const string QueuePrefix = "queue.";
 
             public static class Source
             {
-                public const string TraceId = QueuePrefix + SourcePrefix +  "traceId";
-                public const string SpanId = QueuePrefix + SourcePrefix + "spanId";
-                private const string SourcePrefix = "source.";
+                public const string TraceId = QueueSourcePrefix +  "traceId";
+                public const string SpanId = QueueSourcePrefix + "spanId";
+
+                private const string QueueSourcePrefix = QueuePrefix + "source.";
             }
         }
 
         public static class Cluster
         {
-            public const string Strategy = ClusterPrefix+ "requestStrategy";
+            public const string Strategy = ClusterPrefix + "strategy";
             public const string Status = ClusterPrefix + "status";
+
             private const string ClusterPrefix = "cluster.";
         }
 
         public static class Database
         {
-            public const string Type = DbPrefix + "type";
-            public const string ExecutionResult = DbPrefix + "executionResult";
-            public const string Instance = DbPrefix + "instance";
-            private const string DbPrefix = "db.";
+            public const string Type = DatabasePrefix + "type";
+            public const string ExecutionResult = DatabasePrefix + "executionResult";
+            public const string Instance = DatabasePrefix + "instance";
+
+            private const string DatabasePrefix = "db.";
         }
     }
 }
