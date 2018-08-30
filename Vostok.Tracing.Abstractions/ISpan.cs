@@ -23,8 +23,7 @@ namespace Vostok.Tracing.Abstractions
         /// <summary>
         /// Pareny span identifier, if exist
         /// </summary>
-        [CanBeNull]
-        Guid? ParentSpanId { get; }
+        [CanBeNull] Guid? ParentSpanId { get; }
 
         /// <summary>
         /// The begin timestamp of trace. Represents the time when the span was begin. The local time zone is kept here for future use. 
@@ -34,12 +33,11 @@ namespace Vostok.Tracing.Abstractions
         /// <summary>
         /// The end timestamp of trace. Represents the time when the span was end. The local time zone is kept here for future use. 
         /// </summary>
-        [CanBeNull]
-        DateTimeOffset? EndTimestamp { get; }
+        [CanBeNull] DateTimeOffset? EndTimestamp { get; }
 
         /// <summary>
         /// Contains various user-defined annotations.
         /// </summary>
-        [NotNull]IReadOnlyDictionary<string, string> Annotations { get; }
+        [NotNull] IReadOnlyDictionary<string, string> Annotations { get; }
     }
 }

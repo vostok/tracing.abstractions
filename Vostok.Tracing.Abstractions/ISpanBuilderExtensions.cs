@@ -3,7 +3,7 @@
 namespace Vostok.Tracing.Abstractions
 {
     [PublicAPI]
-    public static class SpanBuilder_Extension
+    public static class ISpanBuilderExtensions
     {
         public static void MakeEndless(this ISpanBuilder spanBuilder)
         {
