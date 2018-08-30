@@ -51,9 +51,9 @@ Submitting an HTTP request directly to an external URL or a service replica.
 | service | Name of the service to which request is sent. | N/A |
 | http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
 | http.request.url | Request URL without query parameters.  | N/A |
-| http.request.contentLength | Request body size in bytes. | N/A |
-| http.response.statusCode | Response code (e.g. `200` or `404`). | N/A  |
-| http.response.contentLength | Response body size in bytes. | N/A |
+| http.request.size | Request body size in bytes. | N/A |
+| http.response.code | Response code (e.g. `200` or `404`). | N/A  |
+| http.response.size | Response body size in bytes. | N/A |
 
 *Normalized URL is a short URL without scheme, authority and query parameters. Unique path segments (entity ids, search queries, hex values) are replaced with placeholders. Example before and after normalization: `http://vm-app1/users/a534bcbd/` --> `users/{id}`*
 
@@ -70,9 +70,9 @@ Submitting an HTTP request to a clustered application with several replicas.
 | cluster.status | Status of interaction with a cluster (e.g. `success`, `no-replicas`, ...)  | N/A |
 | http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
 | http.request.url | Request URL without query parameters.  | N/A |
-| http.request.contentLength | Request body size in bytes. | N/A |
-| http.response.statusCode | Response code (e.g. `200` or `404`). | N/A |
-| http.response.contentLength | Response body size in bytes. | N/A  |
+| http.request.size | Request body size in bytes. | N/A |
+| http.response.code | Response code (e.g. `200` or `404`). | N/A |
+| http.response.size | Response body size in bytes. | N/A  |
 
 ### HTTP server
 
@@ -87,9 +87,9 @@ Handling an HTTP request on server.
 | http.client.address | Address of the client application instance (host name or IP address).  | N/A |
 | http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
 | http.request.url | Request URL without query parameters.  | N/A |
-| http.request.contentLength | Request body size in bytes. | N/A |
-| http.response.statusCode | Response code (e.g. `200` or `404`). | N/A |
-| http.response.contentLength | Response body size in bytes. | N/A |
+| http.request.size | Request body size in bytes. | N/A |
+| http.response.code | Response code (e.g. `200` or `404`). | N/A |
+| http.response.size | Response body size in bytes. | N/A |
 
 ### Database
 
