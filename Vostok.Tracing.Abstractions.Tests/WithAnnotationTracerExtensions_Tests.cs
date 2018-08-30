@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -8,144 +10,182 @@ namespace Vostok.Tracing.Abstractions.Tests
     public class WithAnnotationTracerExtensions_Tests
     {
         private ITracer baseTracer;
-        private ITracer enrichTracer;
+        private ITracer enrichedTracer;
         private ISpanBuilder spanBuilder;
 
         [SetUp]
         public void TestSetup()
         {
-            baseTracer = Substitute.For<ITracer>();
             spanBuilder = Substitute.For<ISpanBuilder>();
 
+            baseTracer = Substitute.For<ITracer>();
             baseTracer.BeginSpan().Returns(spanBuilder);
+            baseTracer.CurrentContext.Returns(new TraceContext(Guid.Empty, Guid.Empty));
         }
 
         [Test]
-        public void WithAnnotation_should_return_a_tracer_that_added_annotation_when_value_is_not_null()
+        public void WithAnnotation_should_return_a_tracer_that_adds_given_annotation_when_value_is_not_null()
         {
-            enrichTracer = baseTracer.WithAnnotation("key1", "value1");
+            enrichedTracer = baseTracer.WithAnnotation("key", "value");
 
-            enrichTracer.BeginSpan();
+            enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key1", "value1", false);
+            spanBuilder.Received().SetAnnotation("key", "value", Arg.Any<bool>());
         }
 
         [Test]
-        public void WithAnnotation_should_return_a_tracer_that_added_annotation_when_value_is_null_and_allowNull()
+        public void WithAnnotation_should_return_a_tracer_that_adds_given_annotation_when_value_is_null()
         {
-            enrichTracer = baseTracer.WithAnnotation("key1", () => null as string, false, true);
+            enrichedTracer = baseTracer.WithAnnotation("key", null as string);
 
-            enrichTracer.BeginSpan();
+            enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key1", null, false);
+            spanBuilder.Received().SetAnnotation("key", null, Arg.Any<bool>());
         }
 
         [Test]
-        public void WithAnnotation_should_return_a_tracer_that_not_added_annotation_when_value_is_null_and_not_allowNull()
+        public void WithAnnotation_should_not_overwrite_existing_values_by_default()
         {
-            enrichTracer = baseTracer.WithAnnotation("key1", () => null as string);
+            enrichedTracer = baseTracer.WithAnnotation("key", "value");
 
-            enrichTracer.BeginSpan();
+            enrichedTracer.BeginSpan();
 
-            spanBuilder.DidNotReceive().SetAnnotation("key1", null, false);
+            spanBuilder.Received().SetAnnotation("key", "value", false);
         }
 
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void WithAnnotation_should_return_a_tracer_that_pass_allowOverwrite_to_spanbuilder(bool allowOverwrite)
+        public void WithAnnotation_should_overwrite_existing_values_when_asked_to()
         {
-            enrichTracer = baseTracer.WithAnnotation("key1", () => "value1", allowOverwrite);
+            enrichedTracer = baseTracer.WithAnnotation("key", "value", true);
 
-            enrichTracer.BeginSpan();
+            enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key1", "value1", allowOverwrite);
+            spanBuilder.Received().SetAnnotation("key", "value");
         }
 
         [Test]
-        public void WithAnnotations_should_return_a_tracer_that_added_annotations()
+        public void WithAnnotation_should_return_a_tracer_that_forwards_context_property_access_to_base_tracer()
         {
-            enrichTracer = baseTracer.WithAnnotations(
+            enrichedTracer = baseTracer.WithAnnotation("key", "value");
+
+            enrichedTracer.CurrentContext.Should().BeSameAs(baseTracer.CurrentContext);
+
+            var newContext = new TraceContext(Guid.NewGuid(), Guid.NewGuid());
+
+            enrichedTracer.CurrentContext = newContext;
+
+            baseTracer.Received().CurrentContext = newContext;
+        }
+
+        [Test]
+        public void WithAnnotation_with_dynamic_value_should_call_value_provider_delegate_for_each_event()
+        {
+            var counter = 0;
+
+            enrichedTracer = baseTracer.WithAnnotation("key", () => (++counter).ToString(), true);
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.Received().SetAnnotation("key", "1", Arg.Any<bool>());
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.Received().SetAnnotation("key", "2", Arg.Any<bool>());
+        }
+
+        [Test]
+        public void WithAnnotation_with_dynamic_value_should_not_overwrite_existing_values_by_default()
+        {
+            enrichedTracer = baseTracer.WithAnnotation("key", () => "value");
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.Received().SetAnnotation(Arg.Any<string>(), Arg.Any<string>(), false);
+        }
+
+        [Test]
+        public void WithAnnotation_with_dynamic_value_should_overwrite_existing_values_when_explicitly_asked_to()
+        {
+            enrichedTracer = baseTracer.WithAnnotation("key", () => "value", true);
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.Received().SetAnnotation(Arg.Any<string>(), Arg.Any<string>(), true);
+        }
+
+        [Test]
+        public void WithAnnotation_with_dynamic_value_should_filter_out_null_values_by_default()
+        {
+            enrichedTracer = baseTracer.WithAnnotation("key", () => null as string);
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.ReceivedCalls().Should().BeEmpty();
+        }
+
+        [Test]
+        public void WithAnnotation_with_dynamic_value_should_pass_null_values_when_asked_to()
+        {
+            enrichedTracer = baseTracer.WithAnnotation("key", () => null as string, allowNullValues: true);
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.Received().SetAnnotation("key", null, Arg.Any<bool>());
+        }
+
+        [Test]
+        public void WithAnnotations_should_return_a_tracer_that_adds_given_annotations_to_span()
+        {
+            enrichedTracer = baseTracer.WithAnnotations(
                 new Dictionary<string, string>
                 {
                     {"key1", "value1"},
                     {"key2", "value2"}
                 });
 
-            enrichTracer.BeginSpan();
+            enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key1", "value1", false);
-            spanBuilder.Received().SetAnnotation("key2", "value2", false);
+            spanBuilder.Received().SetAnnotation("key1", "value1", Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key2", "value2", Arg.Any<bool>());
         }
 
         [Test]
-        public void WithAnnotations_should_filter_out_null_values_when_asked_to()
+        public void WithAnnotations_should_filter_out_null_values_by_default()
         {
-            enrichTracer = baseTracer.WithAnnotations(
+            enrichedTracer = baseTracer.WithAnnotations(
                 new Dictionary<string, string>
                 {
                     {"key1", "value1"},
                     {"key2", null}
                 });
 
-            enrichTracer.BeginSpan();
+            enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key1", "value1", false);
-            spanBuilder.DidNotReceive().SetAnnotation("key2", null, false);
+            spanBuilder.Received().SetAnnotation("key1", "value1", Arg.Any<bool>());
+            spanBuilder.DidNotReceive().SetAnnotation("key2", Arg.Any<string>(), Arg.Any<bool>());
         }
 
         [Test]
         public void WithAnnotations_should_pass_null_values_when_asked_to()
         {
-            enrichTracer = baseTracer.WithAnnotations(
+            enrichedTracer = baseTracer.WithAnnotations(
                 new Dictionary<string, string>
                 {
                     {"key1", "value1"},
                     {"key2", null}
-                },
-                false,
-                true);
+                }, allowNullValues: true);
 
-            enrichTracer.BeginSpan();
+            enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key1", "value1", false);
-            spanBuilder.Received().SetAnnotation("key2", null, false);
+            spanBuilder.Received().SetAnnotation("key1", "value1", Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key2", null, Arg.Any<bool>());
         }
 
-        [Test]
-        public void WithAnnotations_with_dynamic_provider_should_handle_null_object_returned()
-        {
-            enrichTracer = baseTracer.WithAnnotations(() => null);
-
-            enrichTracer.BeginSpan();
-
-            spanBuilder.DidNotReceive().SetAnnotation(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>());
-        }
-
-        [Test]
-        public void WithAnnotations_with_dynamic_provider_should_call_the_delegate_for_each_event()
-        {
-            var counter = 0;
-
-            enrichTracer = baseTracer.WithAnnotations(
-                () => new[]
-                {
-                    ("key1", (++counter).ToString()),
-                    ("key2", (++counter).ToString()),
-                });
-
-            enrichTracer.BeginSpan();
-
-            spanBuilder.Received().SetAnnotation("key1", "1", false);
-            spanBuilder.Received().SetAnnotation("key2", "2", false);
-        }
-
-        [Test]
         [TestCase(true)]
         [TestCase(false)]
-        public void WithAnnotations_should_return_a_tracer_that_pass_allowOverwrite_to_spanbuilder(bool allowOverwrite)
+        public void WithAnnotations_should_return_pass_overwrite_flag_to_span_builder(bool allowOverwrite)
         {
-            enrichTracer = baseTracer.WithAnnotations(
+            enrichedTracer = baseTracer.WithAnnotations(
                 new Dictionary<string, string>
                 {
                     {"key1", "value1"},
@@ -153,7 +193,88 @@ namespace Vostok.Tracing.Abstractions.Tests
                 },
                 allowOverwrite);
 
-            enrichTracer.BeginSpan();
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.Received().SetAnnotation(Arg.Any<string>(), Arg.Any<string>(), allowOverwrite);
+            spanBuilder.Received().SetAnnotation(Arg.Any<string>(), Arg.Any<string>(), allowOverwrite);
+        }
+
+        [Test]
+        public void WithAnnotations_with_dynamic_provider_should_handle_null_object_returned()
+        {
+            enrichedTracer = baseTracer.WithAnnotations(() => null);
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.ReceivedCalls().Should().BeEmpty();
+        }
+
+        [Test]
+        public void WithAnnotations_with_dynamic_provider_should_call_the_delegate_for_each_span()
+        {
+            var counter = 0;
+
+            enrichedTracer = baseTracer.WithAnnotations(
+                () => new[]
+                {
+                    ("key1", (++counter).ToString()),
+                    ("key2", (++counter).ToString())
+                });
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.Received().SetAnnotation("key1", "1", Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key2", "2", Arg.Any<bool>());
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.Received().SetAnnotation("key1", "3", Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key2", "4", Arg.Any<bool>());
+        }
+
+        [Test]
+        public void WithAnnotations_with_dynamic_provider_should_filter_out_null_values_by_default()
+        {
+            enrichedTracer = baseTracer.WithAnnotations(
+                () => new[]
+                {
+                    ("key1", null as string),
+                    ("key2", null as string)
+                });
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.ReceivedCalls().Should().BeEmpty();
+        }
+
+        [Test]
+        public void WithAnnotations_with_dynamic_provider_should_pass_null_values_when_asked_to()
+        {
+            enrichedTracer = baseTracer.WithAnnotations(
+                () => new[]
+                {
+                    ("key1", null as string),
+                    ("key2", null as string)
+                }, allowNullValues: true);
+
+            enrichedTracer.BeginSpan();
+
+            spanBuilder.Received().SetAnnotation("key1", null, Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key2", null, Arg.Any<bool>());
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void WithAnnotations_with_dynamic_provider_should_forward_overwrite_flag_to_span_builder(bool allowOverwrite)
+        {
+            enrichedTracer = baseTracer.WithAnnotations(
+                () => new[]
+                {
+                    ("key1", "value1"),
+                    ("key2", "value2")
+                }, allowOverwrite);
+
+            enrichedTracer.BeginSpan();
 
             spanBuilder.Received().SetAnnotation("key1", "value1", allowOverwrite);
             spanBuilder.Received().SetAnnotation("key2", "value2", allowOverwrite);
