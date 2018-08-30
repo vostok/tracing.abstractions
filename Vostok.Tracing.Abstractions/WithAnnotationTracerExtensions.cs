@@ -15,19 +15,19 @@ namespace Vostok.Tracing.Abstractions
         }
 
         [Pure]
-        public static ITracer WithAnnotation(this ITracer tracer, [NotNull]string key, [NotNull]Func<string> value, bool allowOverwrite = false, bool allowNullValues = false)
+        public static ITracer WithAnnotation(this ITracer tracer, [NotNull] string key, [NotNull] Func<string> value, bool allowOverwrite = false, bool allowNullValues = false)
         {
             return new WithAnnotationTracer(tracer, key, value, allowOverwrite, allowNullValues);
         }
 
         [Pure]
-        public static ITracer WithAnnotations(this ITracer tracer, [NotNull]IReadOnlyDictionary<string, string> annotations, bool allowOverwrite = false, bool allowNullValues = false)
+        public static ITracer WithAnnotations(this ITracer tracer, [NotNull] IReadOnlyDictionary<string, string> annotations, bool allowOverwrite = false, bool allowNullValues = false)
         {
             return new WithAnnotationsTracer(tracer, () => annotations?.Select(pair => (pair.Key, pair.Value)), allowOverwrite, allowNullValues);
         }
 
         [Pure]
-        public static ITracer WithAnnotations(this ITracer tracer, [NotNull]Func<IEnumerable<(string, string)>> annotations, bool allowOverwrite = false, bool allowNullValues = false)
+        public static ITracer WithAnnotations(this ITracer tracer, [NotNull] Func<IEnumerable<(string, string)>> annotations, bool allowOverwrite = false, bool allowNullValues = false)
         {
             return new WithAnnotationsTracer(tracer, annotations, allowOverwrite, allowNullValues);
         }
@@ -59,10 +59,10 @@ namespace Vostok.Tracing.Abstractions
             {
                 var spanBuilder = baseTracer.BeginSpan();
 
-                var valueObject = value();
-                if (valueObject != null || allowNullValues)
+                var valueString = value();
+                if (valueString != null || allowNullValues)
                 {
-                    spanBuilder.SetAnnotation(key, valueObject, allowOverwrite);
+                    spanBuilder.SetAnnotation(key, valueString, allowOverwrite);
                 }
 
                 return spanBuilder;
