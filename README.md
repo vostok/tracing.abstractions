@@ -47,7 +47,7 @@ Submitting an HTTP request directly to an external URL or a service replica.
 | Name | Description | Default value |
 |----|-----|----|
 | kind | See [common annotations](#common-annotations).  | `http-request-client` |
-| operation | See [common annotations](#common-annotations).  | `{http.request.method}: {normalized http.request.url}`. Example: `POST: /page/{num}/process`  |
+| operation | See [common annotations](#common-annotations).  | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
 | service | Name of the service to which request is sent. | N/A |
 | http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
 | http.request.url | Request URL without query parameters.  | N/A |
