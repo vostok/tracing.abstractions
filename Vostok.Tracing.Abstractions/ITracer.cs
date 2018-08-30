@@ -5,10 +5,8 @@ namespace Vostok.Tracing.Abstractions
     [PublicAPI]
     public interface ITracer
     {
-        [NotNull]
-        TraceContext CurrentContext { get; set; }
+        [CanBeNull] TraceContext CurrentContext { get; set; }
 
-        [NotNull]
-        ISpanBuilder BeginSpan();
+        [NotNull] ISpanBuilder BeginSpan();
     }
 }
