@@ -1,81 +1,98 @@
 # Vostok tracing
 
-Tracing displays the history of the operations in time in tree form of smaller actions (spans). Spans can be http requests, query to database, and so on. Each kind of span stores specific information about performed action.
+Distributed tracing allows to reconstruct the history of the logical operation spanning many applications and machines in time as a tree of smaller actions or events called spans. Spans can represent HTTP requests, database queries or any other significant interactions or events in a distributed system. A single span always describes a local event in a single process: an HTTP request usually produces two spans (client-side and server-side). 
 
-Trace has an identifier - traceId, which assigned on input operation (usually on front-end, or for each performing task on queue)
+Each kind of span stores specific information about performed action.
 
-## Trace structure
+Every trace has an identifier called `traceId`. 
 
-Span consist of following fields:
-* TraceId
-* SpanId
-* ParentSpanId
-* BeginTimestamp (datetime begin of operation)
-* EndTimestamp (datetime end of operation, can be null)
-* Annotaions (collection of data in key-value form)
+## Span structure
 
-Usually, each operation contain following annotations
+Every span consists of following fields:
+* `TraceId` — unique identifier of the trace containing the span (Guid).
+  * Gets assigned on first operation (usually on a front-end application instance).
+  * Serves as a correlation identifier between spans
+  
+* `SpanId` — unique identifier of the span itself (Guid).
 
+* `ParentSpanId` — identifier of the parent span in the tree (Guid). 
+  * May be absent for root span in the tree.
+  
+* `BeginTimestamp` — beginning timestamp of the event or interaction described by this span.
+
+* `EndTimestamp` — ending timestamp of the event or interaction described by this span.
+  * Always measured with the same clock as `BeginTimestamp`. This allows to derive span duration as a difference between `EndTimestamp` and `BeginTimestamp`.
+  * May be absent for a special kind of 'endless' spans described further.
+  
+* `Annotatons` — payload in key-value format (string --> string).
+
+
+## Common annotations
+
+These are the annotations relevant for any kind of span:
 
 | Name | Description |
 |----|-----|
-| operation | Operation name. Should be understood by a person when reading tracing |
-| host | Server name where operation processed |
-| kind | Span kind. Usefull for trace rendering and atomatic analysys |
-| component | Program component - span source |
+| operation | Human-readable logical operation or event name (e.g. `create-user`). |
+| host | DNS name of the host the span originated from.  |
+| kind | Span kind. There are a number of predefined span kinds for common use cases (e.g. `http-request-server`). |
+| component | Name of a library or component in code responsible for producing the span. |
 
-## HTTP client (direct)
 
-Performing http-request directly to url
+## Kind-specific annotations 
 
-| Name | Description | Default value |
-|----|-----|----|
-| kind |  | http-request-client |
-| operation |  | {http.request.method}): {normilized http.request.url}. Example: (POST): /page/{num}/process  |
-| service | Microservice name to which the request is made. Set manually or inherit from parent |  |
-| http.request.method | http request method (GET, POST, PUT, DELETE, etc) |  |
-| http.request.url | url without parameters  |  |
-| http.request.contentLength | request body size in bytes |  |
-| http.response.statusCode | http response code status |  |
-| http.response.contentLength | response body size in bytes |  |
+### HTTP client (direct)
 
-Normilized url - short url without scheme, host, query. Replaced segments that are not valuable for the identification of the operation (for example, id entities, search queries, hex)
-
-## HTTP client (cluster)
-
-Performing http-request using cluster library. Describes operation for obtaining data using replicas
+Submitting an HTTP request directly to an external URL or a service replica.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind |  | http-request-cluster |
-| operation |  | {http.request.method}): {normilized http.request.url}. Example: (POST): /page/{num}/process  |
-| service | Microservice name to which the request is made. Set to child spans |  |
-| cluster.requestStrategy | request strategy |  |
-| cluster.status | status performig request using cluster  |  |
-| http.request.method | http request method (GET, POST, PUT, DELETE, etc) |  |
-| http.request.url | url without parameters  |  |
-| http.request.contentLength | request body size in bytes |  |
-| http.response.statusCode | http response code status |  |
-| http.response.contentLength | response body size in bytes |  |
+| kind | See [common annotations](#common-annotations).  | `http-request-client` |
+| operation | See [common annotations](#common-annotations).  | `{http.request.method}: {normalized http.request.url}`. Example: `POST: /page/{num}/process`  |
+| service | Name of the service to which request is sent. | N/A |
+| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
+| http.request.url | Request URL without query parameters.  | N/A |
+| http.request.contentLength | Request body size in bytes. | N/A |
+| http.response.statusCode | Response code (e.g. `200` or `404`). | N/A  |
+| http.response.contentLength | Response body size in bytes. | N/A |
 
-## HTTP server
+*Normalized URL is a short URL without scheme, authority and query parameters. Unique path segments (entity ids, search queries, hex values) are replaced with placeholders. Example before and after normalization: `http://vm-app1/users/a534bcbd/` --> `users/{id}`*
 
-Handle http request by server
+### HTTP client (cluster)
+
+Submitting an HTTP request to a clustered application with several replicas.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind |  | http-request-server |
-| operation |  | {http.request.method}): {normilized http.request.url}. Example: (POST): /page/{num}/process  |
-| service | Microservice name to which the request is handle. |  |
-| http.client.name | http client name |  |
-| http.client.address | http client address (ip address or host)  |  |
-| http.request.method | http request method (GET, POST, PUT, DELETE, etc) |  |
-| http.request.url | url without parameters  |  |
-| http.request.contentLength | request body size in bytes |  |
-| http.response.statusCode | http response code status |  |
-| http.response.contentLength | response body size in bytes |  |
+| kind | See [common annotations](#common-annotations).  | `http-request-cluster` |
+| operation | See [common annotations](#common-annotations). | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
+| service | Name of the service to which request is sent. | N/A |
+| cluster.requestStrategy | Name of the strategy used to send request (e.g. `sequential`, `parallel`, ...) | N/A |
+| cluster.status | Status of interaction with a cluster (e.g. `success`, `no-replicas`, ...)  | N/A |
+| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
+| http.request.url | Request URL without query parameters.  | N/A |
+| http.request.contentLength | Request body size in bytes. | N/A |
+| http.response.statusCode | Response code (e.g. `200` or `404`). | N/A |
+| http.response.contentLength | Response body size in bytes. | N/A  |
 
-## Database
+### HTTP server
+
+Handling an HTTP request on server.
+
+| Name | Description | Default value |
+|----|-----|----|
+| kind | See [common annotations](#common-annotations). | `http-request-server` |
+| operation | See [common annotations](#common-annotations). | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
+| service | Name of the service handling the request. | N/A |
+| http.client.name | Name of the client application that sent the request. | N/A |
+| http.client.address | Address of the client application instance (host name or IP address).  | N/A |
+| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
+| http.request.url | Request URL without query parameters.  | N/A |
+| http.request.contentLength | Request body size in bytes. | N/A |
+| http.response.statusCode | Response code (e.g. `200` or `404`). | N/A |
+| http.response.contentLength | Response body size in bytes. | N/A |
+
+### Database
 
 Perform query to database
 
@@ -87,7 +104,7 @@ Perform query to database
 | db.executionResult | Result of performing request to database |  |
 | db.instance | (Usefull for MS SQL) Instanse database server |  |
 
-## Queue (producer)
+### Queue (producer)
 
 Insert task to queue
 
@@ -101,7 +118,7 @@ Insert task to queue
 | queue.taskId | Recieved task id |  |
 | queue.taskTraceId | Recieved task traceid |  |
 
-## Queue (task-lifecycle)
+### Queue (task-lifecycle)
 
 Root span for processing task. Contains general task description
 
@@ -112,7 +129,7 @@ Root span for processing task. Contains general task description
 | queue.topic | Name of type, topic, thread of queue |  |
 | queue.taskId | Processing task id |  |
 
-## Queue (task-lifecycle-event)
+### Queue (task-lifecycle-event)
 
 Describes event by processing task. Usually with empty duration
 
@@ -123,7 +140,7 @@ Describes event by processing task. Usually with empty duration
 | queue.source.traceId | process TraceId  that trigger the event |  |
 | queue.source.spanId | process SpanId  that trigger the event |  |
 
-## Queue (manager)
+### Queue (manager)
 
 Change state task operation
 
@@ -136,7 +153,7 @@ Change state task operation
 | queue.taskId | Processing task id |  |
 | queue.actionResult |  Result of action |  |
 
-## Queue (consumer)
+### Queue (consumer)
 
 Describes processing task operation
 
@@ -145,9 +162,11 @@ Describes processing task operation
 | kind |  | queue-consumer |
 | queue.executionResult | Result of processing |  |
 
-## Business logic
+### Business logic
 
 Describes the execution of part of the application. 
+
+
 
 # Queue tracing
 
