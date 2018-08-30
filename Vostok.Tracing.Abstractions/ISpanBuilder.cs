@@ -8,8 +8,10 @@ namespace Vostok.Tracing.Abstractions
     {
         bool IsEndless { get; set; }
 
-        void SetAnnotation([NotNull]string key, [CanBeNull]string value, bool allowOverwrite = true);
+        void SetAnnotation([NotNull] string key, [CanBeNull] string value, bool allowOverwrite = true);
+
         void SetBeginTimestamp(DateTimeOffset timestamp);
+
         void SetEndTimestamp(DateTimeOffset timestamp);
     }
 }
