@@ -46,12 +46,12 @@ Submitting an HTTP request directly to an external URL or a service replica.
 |----|-----|----|
 | kind | See [common annotations](#common-annotations).  | `http-request-client` |
 | operation | See [common annotations](#common-annotations).  | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
-| service | Name of the service to which request is sent. | N/A |
-| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
-| http.request.url | Request URL without query parameters.  | N/A |
-| http.request.size | Request body size in bytes. | N/A |
-| http.response.code | Response code (e.g. `200` or `404`). | N/A  |
-| http.response.size | Response body size in bytes. | N/A |
+| service | Name of the service to which request is sent. | `N/A` |
+| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
+| http.request.url | Request URL without query parameters.  | `N/A` |
+| http.request.size | Request body size in bytes. | `N/A` |
+| http.response.code | Response code (e.g. `200` or `404`). | `N/A`  |
+| http.response.size | Response body size in bytes. | `N/A` |
 
 *Normalized URL is a short URL without scheme, authority and query parameters. Unique path segments (entity ids, search queries, hex values) are replaced with placeholders. Example before and after normalization: `http://vm-app1/users/a534bcbd/` --> `users/{id}`*
 
@@ -63,14 +63,14 @@ Submitting an HTTP request to a clustered application with several replicas.
 |----|-----|----|
 | kind | See [common annotations](#common-annotations).  | `http-request-cluster` |
 | operation | See [common annotations](#common-annotations). | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
-| service | Name of the service to which request is sent. | N/A |
-| cluster.requestStrategy | Name of the strategy used to send request (e.g. `sequential`, `parallel`, ...) | N/A |
-| cluster.status | Status of interaction with a cluster (e.g. `success`, `no-replicas`, ...)  | N/A |
-| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
-| http.request.url | Request URL without query parameters.  | N/A |
-| http.request.size | Request body size in bytes. | N/A |
-| http.response.code | Response code (e.g. `200` or `404`). | N/A |
-| http.response.size | Response body size in bytes. | N/A  |
+| service | Name of the service to which request is sent. | `N/A` |
+| cluster.strategy | Name of the strategy used to send request (e.g. `sequential`, `parallel`, ...) | `N/A` |
+| cluster.status | Status of interaction with a cluster (e.g. `success`, `no-replicas`, ...)  | `N/A` |
+| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
+| http.request.url | Request URL without query parameters.  | `N/A` |
+| http.request.size | Request body size in bytes. | `N/A` |
+| http.response.code | Response code (e.g. `200` or `404`). | `N/A` |
+| http.response.size | Response body size in bytes. | `N/A`  |
 
 ### HTTP server
 
@@ -80,88 +80,101 @@ Handling an HTTP request on server.
 |----|-----|----|
 | kind | See [common annotations](#common-annotations). | `http-request-server` |
 | operation | See [common annotations](#common-annotations). | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
-| service | Name of the service handling the request. | N/A |
-| http.client.name | Name of the client application that sent the request. | N/A |
-| http.client.address | Address of the client application instance (host name or IP address).  | N/A |
-| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | N/A |
-| http.request.url | Request URL without query parameters.  | N/A |
-| http.request.size | Request body size in bytes. | N/A |
-| http.response.code | Response code (e.g. `200` or `404`). | N/A |
-| http.response.size | Response body size in bytes. | N/A |
+| service | Name of the service handling the request. | `N/A` |
+| http.client.name | Name of the client application that sent the request. | `N/A` |
+| http.client.address | Address of the client application instance (host name or IP address).  | `N/A` |
+| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
+| http.request.url | Request URL without query parameters.  | `N/A` |
+| http.request.size | Request body size in bytes. | `N/A` |
+| http.response.code | Response code (e.g. `200` or `404`). | `N/A` |
+| http.response.size | Response body size in bytes. | `N/A` |
 
 ### Database
 
-Perform query to database
+Submitting a request to database.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind |  | db-request |
-| operation | Database operation name. For example, reading data from table X, execute stored procedure Y, insert data to table Z, etc  |  For example, Insert data to [dbo].[Tasks], Execute stored procedure [UpdateData] |
-| db.type | Database type (mssql, cassandra, red, etc) |  |
-| db.executionResult | Result of performing request to database |  |
-| db.instance | (Usefull for MS SQL) Instanse database server |  |
+| kind | See [common annotations](#common-annotations). | `db-request` |
+| operation | See [common annotations](#common-annotations). Possible examples: `read from table X`, `insert into  table Z`. | `N/A` |
+| db.type | Database type (`mssql`, `cassandra`, `mongodb`, `redis`, etc). | `N/A` |
+| db.executionResult | Result of performing request to a database. | `N/A` |
+| db.instance | Address of the database server instance. | `N/A` |
 
 ### Queue (producer)
 
-Insert task to queue
+Inserting a task to queue (from the producer standpoint).
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind |  | queue-producer |
-| operation |  | ({queue.type}) Put to {queue.topic}. Example, (Echelon) Put to reports |
-| queue.type | Queue type (Echelon, RabbitMQ etc) |  |
-| queue.topic | Name of type, topic, thread of queue, which inserted task  |  |
-| queue.actionResult | Result of action (in this case, insert to queue) |  |
-| queue.taskId | Recieved task id |  |
-| queue.taskTraceId | Recieved task traceid |  |
+| kind | See [common annotations](#common-annotations). | `queue-producer` |
+| operation | See [common annotations](#common-annotations). | `({queue.type}) Put to '{queue.topic}'`. Example: `(echelon) Put to 'reports'`. |
+| queue.type | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
+| queue.topic | Name of the task type or the topic/queue it was inserted to.  | `N/A` |
+| queue.actionResult | Result of action (`success` or something else). | `N/A` |
+| queue.taskId | Task unique identifier. | `N/A` |
+| queue.taskTraceId | Trace identifier assigned to the task. | `N/A` |
 
 ### Queue (task-lifecycle)
 
-Root span for processing task. Contains general task description
+A span that represents whole lifecycle of the task in queue. It serves as a root span in the task's personal trace.
+
+Spans of this kind do not have an ending timestamp: it must be inferred from the rightmost end timestamp of all the child spans.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind |  | queue-task-lifecycle |
-| queue.type | Queue type (Echelon, RabbitMQ etc) |  |
-| queue.topic | Name of type, topic, thread of queue |  |
-| queue.taskId | Processing task id |  |
+| kind | See [common annotations](#common-annotations). | `queue-task-lifecycle` |
+| queue.type | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
+| queue.topic | Name of the task type or the topic/queue it belongs to. | `N/A` |
+| queue.taskId | Task unique identifier. | `N/A` |
 
 ### Queue (task-lifecycle-event)
 
-Describes event by processing task. Usually with empty duration
+A span that represents an event that somehow changes task state.
+
+Such spans usually have zero duration and are produced by brokers or client libraries.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind |  | queue-task-lifecycle-event |
-| operation | Operation name (put task to queue, pass task to consumer, prolong, delete etc) |  |
-| queue.source.traceId | process TraceId  that trigger the event |  |
-| queue.source.spanId | process SpanId  that trigger the event |  |
+| kind | See [common annotations](#common-annotations). | `queue-task-lifecycle-event` |
+| operation | See [common annotations](#common-annotations). Examples: `pass-to-consumer`, `prolong-execution`, ... | `N/A` |
+| queue.type | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
+| queue.topic | Name of the task type or the topic/queue it belongs to. | `N/A` |
+| queue.taskId | Task unique identifier. | `N/A` |
 
-### Queue (manager)
-
-Change state task operation
-
-| Name | Description | Default value |
-|----|-----|----|
-| kind |  | queue-manager |
-| operation | Operation name (delete, prolong, etc) |  |
-| queue.type | Queue type (Echelon, RabbitMQ etc) |  |
-| queue.topic | Name of type, topic, thread of queue  |  |
-| queue.taskId | Processing task id |  |
-| queue.actionResult |  Result of action |  |
 
 ### Queue (consumer)
 
-Describes processing task operation
+A span that represents execution of a queued task on the consumer.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind |  | queue-consumer |
-| queue.executionResult | Result of processing |  |
+| kind | See [common annotations](#common-annotations). | `queue-consumer` |
+| queue.executionResult | Result of task execution (`success`, `error`, etc). | `N/A` |
 
-### Business logic
 
-Describes the execution of part of the application. 
+### Queue (manager)
+
+A span that represents a management action on the task, but from the client's standpoint, as opposed to `queue-task-lifecycle-event` spans.
+
+| Name | Description | Default value |
+|----|-----|----|
+| kind | See [common annotations](#common-annotations). | `queue-manager` |
+| operation | See [common annotations](#common-annotations). Examples: `delete`, `prolong-execution`, ... | `N/A` |
+| queue.type | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
+| queue.topic | Name of the task type or the topic/queue it belongs to. | `N/A` |
+| queue.taskId | Task unique identifier. | `N/A` |
+| queue.actionResult | Result of action (`success` or something else). | `N/A` |
+
+
+
+### Custom events
+
+A span for custom user-defined event in the application.
+
+| Name | Description | Default value |
+|----|-----|----|
+| kind | See [common annotations](#common-annotations). | `custom-event` |
 
 
 
