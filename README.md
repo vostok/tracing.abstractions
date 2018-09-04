@@ -4,6 +4,23 @@ Distributed tracing allows to reconstruct the history of the logical operation s
 
 <br/>
 
+* [Span structure](#span-structure)
+* [Common annotations](#common-annotations)
+* [Kind-specific annotations](#kind-specific-annotations)
+  * [HTTP client (direct)](#http-client-direct)
+  * [HTTP client (cluster)](#http-client-cluster)
+  * [HTTP server](#http-server)
+  * [Database](#database)
+  * [Queue (producer)](queue-producer)
+  * [Queue (task-lifecycle)](#queue-task-lifecycle)
+  * [Queue (task-lifecycle-event)](#queue-task-lifecycle-event)
+  * [Queue (consumer)](#queue-consumer)
+  * [Queue (manager)](#queue-manager)
+  * [Custom events](#custom-events)
+* [Queue tracing](#queue-tracing)
+
+<br/>
+
 ## Span structure
 
 Every span consists of following fields:
@@ -194,30 +211,27 @@ A span for custom user-defined event in the application.
 | kind | See [common annotations](#common-annotations). | `custom-event` |
 
 <br/>
+<br/>
 
-# Queue tracing
+## Queue tracing
 
-Tracing a queue task is a collection of events that occurred within the lifecycle of the task processing.
+Following conventions apply to tracing of queue tasks:
 
-1. Each task has own trace
-2. General information about task stores in endless root span (doesn't endtimespamp)
-3. Before placing task in queue, it need to be enriched with data: create a traceId task, create root span. TraceId can pass the producer
-4. After placing task in queue, producer can return traceId and taskId (if they where created by the queue). This data saves in the producer span
-5. Root span has `queue-task-lifecycle` kind. All child spans has `queue-task-lifecycle-event` or `queue.consumer` kind
-6. Span of `queue-task-lifecycle-event` kind can have link to process trace, which triggered the event
-7. Events can be zero duration. For example, the event pass task to the consumer.
-8. During the execution of the task, events that change the state of the task can occur (for example, deleting a task by another request). Such events are child of rootspan
-9. Spans that change the status of a task are of the type queue-manager
+* Each task should have a dedicated trace with a root span of `queue-task-lifecycle` kind. This span does not have an explicit end timestamp. It gets "stretched" by child spans instead.
+* Each task should contain its personal `traceId` and root span's `spanId` embedded in content, available for consumers.
+* Root lifecycle spans can have child spans of `queue-task-lifecycle-event` and `queue-consumer` kinds. External operations from producers and management client happen in their own traces.
+* A span of `queue-task-lifecycle-event` kind can have a link to `traceId` of external operation that triggered the event.
+* A span of `queue-producer` kind should have a link to `traceId` of the produced task.
 
 ![General queue tracing scheme](docs/images/general.jpg)
 
-## Echelon tracing 
+<br/>
 
-Since the interaction with the queue broker occurs via http api, the http call spans are stored in the process trace. 
+### Echelon tracing 
 
 ![General queue tracing scheme](docs/images/echelon.jpg)
 
-## Tracing queues without a broker or without access to the source code of the broker
-Broker's trace actions are performed by a process that works with the task
-* When creating a task in the queue, the producer must create a span not only for its own trace, but also create a trace for the task + put in the meta-information of the task.
-* If someone needs to change a task, then this action should be reflected not only in the trace of this process, but also in the task trace.
+<br/>
+
+### Tracing queues without a broker
+If a queue has no broker or there's no access to broker code, its tracing duties have to be performed by client libraries (creation of `queue-task-lifecycle` and `queue-task-lifecycle-event` spans).
