@@ -11,7 +11,7 @@ Distributed tracing allows to reconstruct the history of the logical operation s
   * [HTTP client (cluster)](#http-client-cluster)
   * [HTTP server](#http-server)
   * [Database](#database)
-  * [Queue (producer)](queue-producer)
+  * [Queue (producer)](#queue-producer)
   * [Queue (task-lifecycle)](#queue-task-lifecycle)
   * [Queue (task-lifecycle-event)](#queue-task-lifecycle-event)
   * [Queue (consumer)](#queue-consumer)
