@@ -2,6 +2,7 @@
 
 Distributed tracing allows to reconstruct the history of the logical operation spanning many applications and machines in time as a tree of smaller actions or events called spans. Spans can represent HTTP requests, database queries or any other significant interactions or events in a distributed system. A single span always describes a local event in a single process: an HTTP request usually produces two spans (client-side and server-side). Each kind of span stores specific information about performed action.
 
+<br/>
 
 ## Span structure
 
@@ -23,6 +24,7 @@ Every span consists of following fields:
   
 * `Annotatons` — payload in key-value format (string --> string).
 
+<br/>
 
 ## Common annotations
 
@@ -35,6 +37,7 @@ These are the annotations relevant for any kind of span:
 | kind | Span kind. There are a number of predefined span kinds for common use cases (e.g. `http-request-server`). |
 | component | Name of a library or component in code responsible for producing the span. |
 
+<br/>
 
 ## Kind-specific annotations 
 
@@ -55,6 +58,8 @@ Submitting an HTTP request directly to an external URL or a service replica.
 
 *Normalized URL is a short URL without scheme, authority and query parameters. Unique path segments (entity ids, search queries, hex values) are replaced with placeholders. Example before and after normalization: `http://vm-app1/users/a534bcbd/` --> `users/{id}`*
 
+<br/>
+
 ### HTTP client (cluster)
 
 Submitting an HTTP request to a clustered application with several replicas.
@@ -71,6 +76,8 @@ Submitting an HTTP request to a clustered application with several replicas.
 | http.request.size | Request body size in bytes. | `N/A` |
 | http.response.code | Response code (e.g. `200` or `404`). | `N/A` |
 | http.response.size | Response body size in bytes. | `N/A`  |
+
+<br/>
 
 ### HTTP server
 
@@ -89,6 +96,8 @@ Handling an HTTP request on server.
 | http.response.code | Response code (e.g. `200` or `404`). | `N/A` |
 | http.response.size | Response body size in bytes. | `N/A` |
 
+<br/>
+
 ### Database
 
 Submitting a request to database.
@@ -100,6 +109,8 @@ Submitting a request to database.
 | db.type | Database type (`mssql`, `cassandra`, `mongodb`, `redis`, etc). | `N/A` |
 | db.executionResult | Result of performing request to a database. | `N/A` |
 | db.instance | Address of the database server instance. | `N/A` |
+
+<br/>
 
 ### Queue (producer)
 
@@ -115,6 +126,8 @@ Inserting a task to queue (from the producer standpoint).
 | queue.taskId | Task unique identifier. | `N/A` |
 | queue.taskTraceId | Trace identifier assigned to the task. | `N/A` |
 
+<br/>
+
 ### Queue (task-lifecycle)
 
 A span that represents whole lifecycle of the task in queue. It serves as a root span in the task's personal trace.
@@ -127,6 +140,8 @@ Spans of this kind do not have an ending timestamp: it must be inferred from the
 | queue.type | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
 | queue.topic | Name of the task type or the topic/queue it belongs to. | `N/A` |
 | queue.taskId | Task unique identifier. | `N/A` |
+
+<br/>
 
 ### Queue (task-lifecycle-event)
 
@@ -142,6 +157,7 @@ Such spans usually have zero duration and are produced by brokers or client libr
 | queue.topic | Name of the task type or the topic/queue it belongs to. | `N/A` |
 | queue.taskId | Task unique identifier. | `N/A` |
 
+<br/>
 
 ### Queue (consumer)
 
@@ -152,6 +168,7 @@ A span that represents execution of a queued task on the consumer.
 | kind | See [common annotations](#common-annotations). | `queue-consumer` |
 | queue.executionResult | Result of task execution (`success`, `error`, etc). | `N/A` |
 
+<br/>
 
 ### Queue (manager)
 
@@ -166,7 +183,7 @@ A span that represents a management action on the task, but from the client's st
 | queue.taskId | Task unique identifier. | `N/A` |
 | queue.actionResult | Result of action (`success` or something else). | `N/A` |
 
-
+<br/>
 
 ### Custom events
 
@@ -176,7 +193,7 @@ A span for custom user-defined event in the application.
 |----|-----|----|
 | kind | See [common annotations](#common-annotations). | `custom-event` |
 
-
+<br/>
 
 # Queue tracing
 
