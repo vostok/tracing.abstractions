@@ -11,14 +11,19 @@ Distributed tracing allows to reconstruct the history of the logical operation s
     * [HTTP client (direct)](#http-client-direct)
     * [HTTP client (cluster)](#http-client-cluster)
     * [HTTP server](#http-server)
-  * [Database](#database)
-  * [Queue (producer)](#queue-producer)
-  * [Queue (task-lifecycle)](#queue-task-lifecycle)
-  * [Queue (task-lifecycle-event)](#queue-task-lifecycle-event)
-  * [Queue (consumer)](#queue-consumer)
-  * [Queue (manager)](#queue-manager)
-  * [Custom events](#custom-events)
-* [Queue tracing](#queue-tracing)
+  * [Database requests](#database-requests)
+    * [Cassandra](#cassandra)
+    * [MongoDB](#mongodb)
+    * [ElasticSearch](#elasticsearch)
+    * [MS SQL](#ms-sql)
+  * [Distributed task queues](#distributed-task-queues)
+    * [Queue (producer)](#queue-producer)
+    * [Queue (task-lifecycle)](#queue-task-lifecycle)
+    * [Queue (task-lifecycle-event)](#queue-task-lifecycle-event)
+    * [Queue (consumer)](#queue-consumer)
+    * [Queue (manager)](#queue-manager)
+    * [Custom events](#custom-events)
+* [Queue tracing conventions](#queue-tracing-conventions)
 
 <br/>
 
@@ -83,8 +88,6 @@ Common annotations for all spans related to HTTP requests:
 
 Submitting an HTTP request directly to an external URL or a service replica.
 
-Specific annotations:
-
 | Name | Description | Default value |
 |----|-----|----|
 | `kind` | See [common annotations](#common-annotations).  | `http-request-client` |
@@ -93,11 +96,9 @@ Specific annotations:
 
 <br/>
 
-### HTTP client (cluster)
+#### HTTP client (cluster)
 
 Submitting an HTTP request to a clustered application with several replicas.
-
-Specific annotations:
 
 | Name | Description | Default value |
 |----|-----|----|
@@ -109,11 +110,9 @@ Specific annotations:
 
 <br/>
 
-### HTTP server
+#### HTTP server
 
 Handling an HTTP request on server.
-
-Specific annotations:
 
 | Name | Description | Default value |
 |----|-----|----|
@@ -124,7 +123,7 @@ Specific annotations:
 <br/>
 <br/>
 
-### Database
+### Database requests
 
 Submitting a request to database.
 
@@ -136,9 +135,29 @@ Submitting a request to database.
 | db.executionResult | Result of performing request to a database. | `N/A` |
 | db.instance | Address of the database server instance. | `N/A` |
 
+#### MS SQL
+
+TODO
+
+#### Cassandra
+
+TODO
+
+#### MongoDB
+
+TODO
+
+#### ElasticSearch
+
+TODO
+
+<br/>
 <br/>
 
-### Queue (producer)
+
+### Distributed task queues
+
+#### Queue (producer)
 
 Inserting a task to queue (from the producer standpoint).
 
@@ -154,7 +173,7 @@ Inserting a task to queue (from the producer standpoint).
 
 <br/>
 
-### Queue (task-lifecycle)
+#### Queue (task-lifecycle)
 
 A span that represents whole lifecycle of the task in queue. It serves as a root span in the task's personal trace.
 
@@ -169,7 +188,7 @@ Spans of this kind do not have an ending timestamp: it must be inferred from the
 
 <br/>
 
-### Queue (task-lifecycle-event)
+#### Queue (task-lifecycle-event)
 
 A span that represents an event that somehow changes task state.
 
@@ -185,7 +204,7 @@ Such spans usually have zero duration and are produced by brokers or client libr
 
 <br/>
 
-### Queue (consumer)
+#### Queue (consumer)
 
 A span that represents execution of a queued task on the consumer.
 
@@ -196,7 +215,7 @@ A span that represents execution of a queued task on the consumer.
 
 <br/>
 
-### Queue (manager)
+#### Queue (manager)
 
 A span that represents a management action on the task, but from the client's standpoint, as opposed to `queue-task-lifecycle-event` spans.
 
@@ -210,19 +229,10 @@ A span that represents a management action on the task, but from the client's st
 | queue.actionResult | Result of action (`success` or something else). | `N/A` |
 
 <br/>
-
-### Custom events
-
-A span for custom user-defined event in the application.
-
-| Name | Description | Default value |
-|----|-----|----|
-| kind | See [common annotations](#common-annotations). | `custom-event` |
-
-<br/>
 <br/>
 
-## Queue tracing
+
+## Queue tracing conventions
 
 Following conventions apply to tracing of queue tasks:
 
@@ -234,13 +244,4 @@ Following conventions apply to tracing of queue tasks:
 
 ![General queue tracing scheme](docs/images/general.jpg)
 
-<br/>
-
-### Echelon tracing 
-
-![General queue tracing scheme](docs/images/echelon.jpg)
-
-<br/>
-
-### Tracing queues without a broker
 If a queue has no broker or there's no access to broker code, its tracing duties have to be performed by client libraries (creation of `queue-task-lifecycle` and `queue-task-lifecycle-event` spans).
