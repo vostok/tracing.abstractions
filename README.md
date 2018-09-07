@@ -7,9 +7,10 @@ Distributed tracing allows to reconstruct the history of the logical operation s
 * [Span structure](#span-structure)
 * [Common annotations](#common-annotations)
 * [Kind-specific annotations](#kind-specific-annotations)
-  * [HTTP client (direct)](#http-client-direct)
-  * [HTTP client (cluster)](#http-client-cluster)
-  * [HTTP server](#http-server)
+  * [HTTP requests](#http-requests)
+    * [HTTP client (direct)](#http-client-direct)
+    * [HTTP client (cluster)](#http-client-cluster)
+    * [HTTP server](#http-server)
   * [Database](#database)
   * [Queue (producer)](#queue-producer)
   * [Queue (task-lifecycle)](#queue-task-lifecycle)
@@ -39,7 +40,7 @@ Every span consists of following fields:
   * Always measured with the same clock as `BeginTimestamp`. This allows to derive span duration as a difference between `EndTimestamp` and `BeginTimestamp`.
   * May be absent for a special kind of 'endless' spans described further.
   
-* `Annotatons` — payload in key-value format (string --> string).
+* `Annotations` — payload in key-value format (string --> string).
 
 <br/>
 
@@ -57,19 +58,17 @@ These are the annotations relevant for any span:
 | `component` | Name of a library or component in code responsible for producing the span. |
 
 <br/>
+<br/>
 
 ## Kind-specific annotations 
 
-### HTTP client (direct)
+### HTTP requests
 
-Submitting an HTTP request directly to an external URL or a service replica.
+Common annotations for all spans related to HTTP requests:
 
 | Name | Description | Default value |
 |----|-----|----|
-| `kind` | See [common annotations](#common-annotations).  | `http-request-client` |
 | `operation` | See [common annotations](#common-annotations).  | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
-| `http.request.targetService` | Name of the service to which request is sent. | `N/A` |
-| `http.request.targetEnvironment` | Name of the environment to which request is sent. | `N/A` |
 | `http.request.method` | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
 | `http.request.url` | Request URL without query parameters.  | `N/A` |
 | `http.request.size` | Request body size in bytes. | `N/A` |
@@ -80,23 +79,33 @@ Submitting an HTTP request directly to an external URL or a service replica.
 
 <br/>
 
+#### HTTP client (direct)
+
+Submitting an HTTP request directly to an external URL or a service replica.
+
+Specific annotations:
+
+| Name | Description | Default value |
+|----|-----|----|
+| `kind` | See [common annotations](#common-annotations).  | `http-request-client` |
+| `http.request.targetService` | Name of the service to which request is sent. | `N/A` |
+| `http.request.targetEnvironment` | Name of the environment to which request is sent. | `N/A` |
+
+<br/>
+
 ### HTTP client (cluster)
 
 Submitting an HTTP request to a clustered application with several replicas.
 
+Specific annotations:
+
 | Name | Description | Default value |
 |----|-----|----|
-| kind | See [common annotations](#common-annotations).  | `http-request-cluster` |
-| operation | See [common annotations](#common-annotations). | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
+| `kind` | See [common annotations](#common-annotations).  | `http-request-cluster` |
 | `cluster.strategy` | Name of the strategy used to send request (e.g. `sequential`, `parallel`, ...) | `N/A` |
 | `cluster.status` | Status of interaction with a cluster (e.g. `success`, `no-replicas`, ...)  | `N/A` |
 | `http.request.targetService` | Name of the service to which request is sent. | `N/A` |
 | `http.request.targetEnvironment` | Name of the environment to which request is sent. | `N/A` |
-| `http.request.method` | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
-| `http.request.url` | Request URL without query parameters.  | `N/A` |
-| `http.request.size` | Request body size in bytes. | `N/A` |
-| `http.response.code` | Response code (e.g. `200` or `404`). | `N/A` |
-| `http.response.size` | Response body size in bytes. | `N/A`  |
 
 <br/>
 
@@ -104,18 +113,15 @@ Submitting an HTTP request to a clustered application with several replicas.
 
 Handling an HTTP request on server.
 
+Specific annotations:
+
 | Name | Description | Default value |
 |----|-----|----|
-| kind | See [common annotations](#common-annotations). | `http-request-server` |
-| operation | See [common annotations](#common-annotations). | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
+| `kind` | See [common annotations](#common-annotations). | `http-request-server` |
 | `http.client.name` | Name of the client application that sent the request. | `N/A` |
 | `http.client.address` | Address of the client application instance (host name or IP address).  | `N/A` |
-| `http.request.method` | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
-| `http.request.url` | Request URL without query parameters.  | `N/A` |
-| `http.request.size` | Request body size in bytes. | `N/A` |
-| `http.response.code` | Response code (e.g. `200` or `404`). | `N/A` |
-| `http.response.size` | Response body size in bytes. | `N/A` |
 
+<br/>
 <br/>
 
 ### Database
