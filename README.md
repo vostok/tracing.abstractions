@@ -1,6 +1,6 @@
 # Vostok tracing
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ojhs21c0273mr12t/branch/master?svg=true)](https://ci.appveyor.com/project/vostok/tracing-abstractions/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/vostok/tracing.abstractions?svg=true&branch=master)](https://ci.appveyor.com/project/vostok/tracing-abstractions/branch/master)
 [![NuGet](https://img.shields.io/nuget/v/Vostok.Tracing.Abstractions.svg)](https://www.nuget.org/packages/Vostok.Tracing.Abstractions/)
 
 Distributed tracing allows to reconstruct the history of the logical operation spanning many applications and machines in time as a tree of smaller actions or events called spans. Spans can represent HTTP requests, database queries or any other significant interactions or events in a distributed system. A single span always describes a local event in a single process: an HTTP request usually produces two spans (client-side and server-side). Each kind of span stores specific information about performed action.
