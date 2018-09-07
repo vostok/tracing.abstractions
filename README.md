@@ -45,14 +45,16 @@ Every span consists of following fields:
 
 ## Common annotations
 
-These are the annotations relevant for any kind of span:
+These are the annotations relevant for any span:
 
 | Name | Description |
 |----|-----|
-| operation | Human-readable logical operation or event name (e.g. `create-user`). |
-| host | DNS name of the host the span originated from.  |
-| kind | Span kind. There are a number of predefined span kinds for common use cases (e.g. `http-request-server`). |
-| component | Name of a library or component in code responsible for producing the span. |
+| `kind` | Span kind. There are a number of predefined span kinds for common use cases (e.g. `http-request-server`). |
+| `operation` | Human-readable logical operation or event name (e.g. `create-user`). |
+| `application` | Name of the application the span originated from. |
+| `environment` | Name of the environment the span originated from. |
+| `host` | DNS name of the host the span originated from.  |
+| `component` | Name of a library or component in code responsible for producing the span. |
 
 <br/>
 
@@ -64,14 +66,15 @@ Submitting an HTTP request directly to an external URL or a service replica.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind | See [common annotations](#common-annotations).  | `http-request-client` |
-| operation | See [common annotations](#common-annotations).  | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
-| service | Name of the service to which request is sent. | `N/A` |
-| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
-| http.request.url | Request URL without query parameters.  | `N/A` |
-| http.request.size | Request body size in bytes. | `N/A` |
-| http.response.code | Response code (e.g. `200` or `404`). | `N/A`  |
-| http.response.size | Response body size in bytes. | `N/A` |
+| `kind` | See [common annotations](#common-annotations).  | `http-request-client` |
+| `operation` | See [common annotations](#common-annotations).  | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
+| `http.request.targetService` | Name of the service to which request is sent. | `N/A` |
+| `http.request.targetEnvironment` | Name of the environment to which request is sent. | `N/A` |
+| `http.request.method` | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
+| `http.request.url` | Request URL without query parameters.  | `N/A` |
+| `http.request.size` | Request body size in bytes. | `N/A` |
+| `http.response.code` | Response code (e.g. `200` or `404`). | `N/A`  |
+| `http.response.size` | Response body size in bytes. | `N/A` |
 
 *Normalized URL is a short URL without scheme, authority and query parameters. Unique path segments (entity ids, search queries, hex values) are replaced with placeholders. Example before and after normalization: `http://vm-app1/users/a534bcbd/` --> `users/{id}`*
 
@@ -85,14 +88,15 @@ Submitting an HTTP request to a clustered application with several replicas.
 |----|-----|----|
 | kind | See [common annotations](#common-annotations).  | `http-request-cluster` |
 | operation | See [common annotations](#common-annotations). | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
-| service | Name of the service to which request is sent. | `N/A` |
-| cluster.strategy | Name of the strategy used to send request (e.g. `sequential`, `parallel`, ...) | `N/A` |
-| cluster.status | Status of interaction with a cluster (e.g. `success`, `no-replicas`, ...)  | `N/A` |
-| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
-| http.request.url | Request URL without query parameters.  | `N/A` |
-| http.request.size | Request body size in bytes. | `N/A` |
-| http.response.code | Response code (e.g. `200` or `404`). | `N/A` |
-| http.response.size | Response body size in bytes. | `N/A`  |
+| `cluster.strategy` | Name of the strategy used to send request (e.g. `sequential`, `parallel`, ...) | `N/A` |
+| `cluster.status` | Status of interaction with a cluster (e.g. `success`, `no-replicas`, ...)  | `N/A` |
+| `http.request.targetService` | Name of the service to which request is sent. | `N/A` |
+| `http.request.targetEnvironment` | Name of the environment to which request is sent. | `N/A` |
+| `http.request.method` | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
+| `http.request.url` | Request URL without query parameters.  | `N/A` |
+| `http.request.size` | Request body size in bytes. | `N/A` |
+| `http.response.code` | Response code (e.g. `200` or `404`). | `N/A` |
+| `http.response.size` | Response body size in bytes. | `N/A`  |
 
 <br/>
 
@@ -104,14 +108,13 @@ Handling an HTTP request on server.
 |----|-----|----|
 | kind | See [common annotations](#common-annotations). | `http-request-server` |
 | operation | See [common annotations](#common-annotations). | `{http.request.method} {normalized http.request.url}`. Example: `POST /page/{num}/process`  |
-| service | Name of the service handling the request. | `N/A` |
-| http.client.name | Name of the client application that sent the request. | `N/A` |
-| http.client.address | Address of the client application instance (host name or IP address).  | `N/A` |
-| http.request.method | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
-| http.request.url | Request URL without query parameters.  | `N/A` |
-| http.request.size | Request body size in bytes. | `N/A` |
-| http.response.code | Response code (e.g. `200` or `404`). | `N/A` |
-| http.response.size | Response body size in bytes. | `N/A` |
+| `http.client.name` | Name of the client application that sent the request. | `N/A` |
+| `http.client.address` | Address of the client application instance (host name or IP address).  | `N/A` |
+| `http.request.method` | Request method (e.g. `GET`, `POST`, `PUT`, etc). | `N/A` |
+| `http.request.url` | Request URL without query parameters.  | `N/A` |
+| `http.request.size` | Request body size in bytes. | `N/A` |
+| `http.response.code` | Response code (e.g. `200` or `404`). | `N/A` |
+| `http.response.size` | Response body size in bytes. | `N/A` |
 
 <br/>
 
