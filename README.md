@@ -132,11 +132,11 @@ Submitting a request to database.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind | See [common annotations](#common-annotations). | `db-request` |
-| operation | See [common annotations](#common-annotations). Possible examples: `read from table X`, `insert into  table Z`. | `N/A` |
-| db.type | Database type (`mssql`, `cassandra`, `mongodb`, `redis`, etc). | `N/A` |
-| db.executionResult | Result of performing request to a database. | `N/A` |
-| db.instance | Address of the database server instance. | `N/A` |
+| `kind` | See [common annotations](#common-annotations). | `db-request` |
+| `operation` | See [common annotations](#common-annotations). Possible examples: `read from table X`, `insert into  table Z`. | `N/A` |
+| `db.type` | Database type (`mssql`, `cassandra`, `mongodb`, `elastic`, etc). | `N/A` |
+| `db.instance` | Address of the database server instance (URL, hostname, connection string). | `N/A` |
+| `...` | Any other database-specific annotations. | `N/A` |
 
 #### MS SQL
 
@@ -160,19 +160,28 @@ TODO
 
 ### Distributed task queues
 
-#### Queue (producer)
+See [queue tracing conventions](#queue-tracing-conventions) for more context.
 
-Inserting a task to queue (from the producer standpoint).
+Common annotations for all spans related to distributed task queues:
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind | See [common annotations](#common-annotations). | `queue-producer` |
-| operation | See [common annotations](#common-annotations). | `({queue.type}) Put to '{queue.topic}'`. Example: `(echelon) Put to 'reports'`. |
-| queue.type | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
-| queue.topic | Name of the task type or the topic/queue it was inserted to.  | `N/A` |
-| queue.actionResult | Result of action (`success` or something else). | `N/A` |
-| queue.taskId | Task unique identifier. | `N/A` |
-| queue.taskTraceId | Trace identifier assigned to the task. | `N/A` |
+| `queue.type` | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
+| `queue.topic` | Name of the task type or the topic/queue it was inserted to.  | `N/A` |
+| `queue.taskId` | Task unique identifier. | `N/A` |
+
+<br/>
+
+#### Queue (producer)
+
+A span that represents insertion of a task to queue (from the producer standpoint). Note that this span should not be in the same trace with subsequent spans related to inserted task: instead, it's connected with dedicated task trace with `queue.taskTraceId` annotation.
+
+| Name | Description | Default value |
+|----|-----|----|
+| `kind` | See [common annotations](#common-annotations). | `queue-producer` |
+| `operation` | See [common annotations](#common-annotations). | `({queue.type}) Put to '{queue.topic}'`. Example: `(echelon) Put to 'reports'`. |
+| `queue.actionResult` | Result of action (`success`, `error`, `timeout` or something else). | `N/A` |
+| `queue.taskTraceId` | Trace identifier assigned to the task. | `N/A` |
 
 <br/>
 
@@ -180,14 +189,15 @@ Inserting a task to queue (from the producer standpoint).
 
 A span that represents whole lifecycle of the task in queue. It serves as a root span in the task's personal trace.
 
-Spans of this kind do not have an ending timestamp: it must be inferred from the rightmost end timestamp of all the child spans.
+Spans of this kind are special in two ways:
+
+1. They are non-local: task lifecycle spans do not directly relate with events happening inside any single process.
+2. They do not have an ending timestamp: it must be inferred from the rightmost end timestamp of all the child spans.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind | See [common annotations](#common-annotations). | `queue-task-lifecycle` |
-| queue.type | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
-| queue.topic | Name of the task type or the topic/queue it belongs to. | `N/A` |
-| queue.taskId | Task unique identifier. | `N/A` |
+| `kind` | See [common annotations](#common-annotations). | `queue-task-lifecycle` |
+| `queue.producerTraceId` | Trace identifier of the producer's (client app that created the task) request. | `N/A` |
 
 <br/>
 
@@ -199,11 +209,10 @@ Such spans usually have zero duration and are produced by brokers or client libr
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind | See [common annotations](#common-annotations). | `queue-task-lifecycle-event` |
-| operation | See [common annotations](#common-annotations). Examples: `pass-to-consumer`, `prolong-execution`, ... | `N/A` |
-| queue.type | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
-| queue.topic | Name of the task type or the topic/queue it belongs to. | `N/A` |
-| queue.taskId | Task unique identifier. | `N/A` |
+| `kind` | See [common annotations](#common-annotations). | `queue-task-lifecycle-event` |
+| `operation` | See [common annotations](#common-annotations). Examples: `pass-to-consumer`, `prolong-execution`, ... | `N/A` |
+| `queue.externalTraceId` | Trace identifier of the client app request that triggered the event (if any). | `N/A` |
+| `...` | Any other operation-specific annotations. | `N/A` |
 
 <br/>
 
@@ -213,23 +222,20 @@ A span that represents execution of a queued task on the consumer.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind | See [common annotations](#common-annotations). | `queue-consumer` |
-| queue.executionResult | Result of task execution (`success`, `error`, etc). | `N/A` |
+| `kind` | See [common annotations](#common-annotations). | `queue-consumer` |
+| `queue.executionResult` | Result of task execution (`success`, `error`, etc). Might have queue-specific values. | `N/A` |
 
 <br/>
 
 #### Queue (manager)
 
-A span that represents a management action on the task, but from the client's standpoint, as opposed to `queue-task-lifecycle-event` spans.
+A span that represents a management action on the task, but from the client's standpoint, as opposed to `queue-task-lifecycle-event` spans. Note that this span should not be in the same trace with subsequent spans related to managed task.
 
 | Name | Description | Default value |
 |----|-----|----|
-| kind | See [common annotations](#common-annotations). | `queue-manager` |
-| operation | See [common annotations](#common-annotations). Examples: `delete`, `prolong-execution`, ... | `N/A` |
-| queue.type | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
-| queue.topic | Name of the task type or the topic/queue it belongs to. | `N/A` |
-| queue.taskId | Task unique identifier. | `N/A` |
-| queue.actionResult | Result of action (`success` or something else). | `N/A` |
+| `kind` | See [common annotations](#common-annotations). | `queue-manager` |
+| `operation` | See [common annotations](#common-annotations). Examples: `delete`, `prolong-execution`, ... | `N/A` |
+| `queue.actionResult` | Result of action (`success`, `error`, `timeout` or something else). | `N/A` |
 
 <br/>
 <br/>
@@ -240,9 +246,13 @@ A span that represents a management action on the task, but from the client's st
 Following conventions apply to tracing of queue tasks:
 
 * Each task should have a dedicated trace with a root span of `queue-task-lifecycle` kind. This span does not have an explicit end timestamp. It gets "stretched" by child spans instead.
+
 * Each task should contain its personal `traceId` and root span's `spanId` embedded in content, available for consumers.
-* Root lifecycle spans can have child spans of `queue-task-lifecycle-event` and `queue-consumer` kinds. External operations from producers and management client happen in their own traces.
+
+* Root lifecycle spans can have child spans of `queue-task-lifecycle-event` and `queue-consumer` kinds. External operations from producers and management clients happen in their own traces.
+
 * A span of `queue-task-lifecycle-event` kind can have a link to `traceId` of external operation that triggered the event.
+
 * A span of `queue-producer` kind should have a link to `traceId` of the produced task.
 
 ![General queue tracing scheme](docs/images/general.jpg)
