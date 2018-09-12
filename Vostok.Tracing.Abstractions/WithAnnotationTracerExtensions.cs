@@ -8,24 +8,43 @@ namespace Vostok.Tracing.Abstractions
     [PublicAPI]
     public static class WithAnnotationTracerExtensions
     {
+        /// <summary>
+        /// <para>Returns a wrapper tracer that adds a static annotation with given <paramref name="key"/> and <paramref name="value"/> to each <see cref="ISpanBuilder"/> before handing it to the calling code.</para>
+        /// <para>By default, existing annotations are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+        /// </summary>
         [Pure]
         public static ITracer WithAnnotation(this ITracer tracer, [NotNull] string key, [CanBeNull] string value, bool allowOverwrite = false)
         {
             return new WithAnnotationTracer(tracer, key, () => value, allowOverwrite, true);
         }
 
+        /// <summary>
+        /// <para>Returns a wrapper tracer that adds a dynamic annotation with given <paramref name="key"/> and <paramref name="value"/> provider to each <see cref="ISpanBuilder"/> before handing it to the calling code.</para>
+        /// <para>By default, existing annotations are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+        /// <para>By default, <c>null</c> values are not added to spans. This can be changed via <paramref name="allowNullValues"/> parameter.</para>
+        /// </summary>
         [Pure]
         public static ITracer WithAnnotation(this ITracer tracer, [NotNull] string key, [NotNull] Func<string> value, bool allowOverwrite = false, bool allowNullValues = false)
         {
             return new WithAnnotationTracer(tracer, key, value, allowOverwrite, allowNullValues);
         }
 
+        /// <summary>
+        /// <para>Returns a wrapper tracer that adds all of given <paramref name="annotations"/> to each <see cref="ISpanBuilder"/> before handing it to the calling code.</para>
+        /// <para>By default, existing annotations are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+        /// <para>By default, <c>null</c> values are not added to spans. This can be changed via <paramref name="allowNullValues"/> parameter.</para>
+        /// </summary>
         [Pure]
         public static ITracer WithAnnotations(this ITracer tracer, [NotNull] IReadOnlyDictionary<string, string> annotations, bool allowOverwrite = false, bool allowNullValues = false)
         {
             return new WithAnnotationsTracer(tracer, () => annotations?.Select(pair => (pair.Key, pair.Value)), allowOverwrite, allowNullValues);
         }
 
+        /// <summary>
+        /// <para>Returns a wrapper tracer that adds all the annotations returned by given delegate to each <see cref="ISpanBuilder"/> before handing it to the calling code.</para>
+        /// <para>By default, existing annotations are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+        /// <para>By default, <c>null</c> values are not added to spans. This can be changed via <paramref name="allowNullValues"/> parameter.</para>
+        /// </summary>
         [Pure]
         public static ITracer WithAnnotations(this ITracer tracer, [NotNull] Func<IEnumerable<(string, string)>> annotations, bool allowOverwrite = false, bool allowNullValues = false)
         {
