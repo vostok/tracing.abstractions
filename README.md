@@ -106,8 +106,8 @@ Submitting an HTTP request to a clustered application with several replicas.
 | Name | Description | Default value |
 |----|-----|----|
 | `kind` | See [common annotations](#common-annotations).  | `http-request-cluster` |
-| `cluster.strategy` | Name of the strategy used to send request (e.g. `sequential`, `parallel`, ...) | `N/A` |
-| `cluster.status` | Status of interaction with a cluster (e.g. `success`, `no-replicas`, ...)  | `N/A` |
+| `http.cluster.strategy` | Name of the strategy used to send request (e.g. `sequential`, `parallel`, ...) | `N/A` |
+| `http.cluster.status` | Status of interaction with a cluster (e.g. `success`, `no-replicas`, ...)  | `N/A` |
 | `http.request.targetService` | Name of the service to which request is sent. | `N/A` |
 | `http.request.targetEnvironment` | Name of the environment to which request is sent. | `N/A` |
 
