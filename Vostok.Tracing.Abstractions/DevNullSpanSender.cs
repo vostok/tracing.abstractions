@@ -3,7 +3,7 @@
 namespace Vostok.Tracing.Abstractions
 {
     [PublicAPI]
-    public class SilentSpanSender : ISpanSender
+    public class DevNullSpanSender : ISpanSender
     {
         public SpanSendResult Send(ISpan span) => SpanSendResult.Sent;
     }
