@@ -5,7 +5,7 @@ namespace Vostok.Tracing.Abstractions
 {
     /// <summary>
     /// <para><see cref="ISpanBuilder"/> purpose is to facilitate easy construction of <see cref="ISpan"/>s in applications.</para>
-    /// <para>It's lifetime (from instantiation to <see cref="ISpanBuilder.Dispose"/>) is closely tied to the constructed span:</para>
+    /// <para>It's lifetime (from instantiation to <see cref="ISpanBuilder.Dispose"/>) is closely tied to the constructed span properties:</para>
     /// <list type="bullet">
     ///     <item><description>Instantiation moment is a default <see cref="ISpan.BeginTimestamp"/> for constructed span. <br/><br/></description></item>
     ///     <item><description>Disposal moment is a default <see cref="ISpan.EndTimestamp"/> for constructed span. <br/><br/></description></item>
