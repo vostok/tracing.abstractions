@@ -42,9 +42,9 @@ Every span consists of following fields:
 * `ParentSpanId` — identifier of the parent span in the tree (Guid). 
   * May be absent for root span in the tree.
   
-* `BeginTimestamp` — beginning timestamp of the event or interaction described by this span.
+* `BeginTimestamp` — beginning timestamp of the event or interaction described by this span (UTC timestamp + timezone offset).
 
-* `EndTimestamp` — ending timestamp of the event or interaction described by this span.
+* `EndTimestamp` — ending timestamp of the event or interaction described by this span (UTC timestamp + timezone offset).
   * Always measured with the same clock as `BeginTimestamp`. This allows to derive span duration as a difference between `EndTimestamp` and `BeginTimestamp`.
   * May be absent for a special kind of 'endless' spans described further.
   
@@ -166,7 +166,7 @@ Common annotations for all spans related to distributed task queues:
 
 | Name | Description | Default value |
 |----|-----|----|
-| `queue.type` | Queue type (`echelon`, `rabbit`, etc). | `N/A` |
+| `queue.type` | Queue type (`rabbit`, etc). | `N/A` |
 | `queue.topic` | Name of the task type or the topic/queue it was inserted to.  | `N/A` |
 | `queue.taskId` | Task unique identifier. | `N/A` |
 
