@@ -27,6 +27,7 @@ namespace Vostok.Tracing.Abstractions
     ///     }
     /// </code><br/>
     /// <para><see cref="SetBeginTimestamp"/> and <see cref="SetEndTimestamp"/> are optional and should only be used to override default timestamps.</para>
+    /// <para>Implementations of this interface are generally <b>not expected to be thread-safe!</b> Don't use an <see cref="ISpanBuilder"/> instance concurrently from multiple threads.</para>
     /// </summary>
     [PublicAPI]
     public interface ISpanBuilder : IDisposable

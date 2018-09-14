@@ -2,6 +2,10 @@
 
 namespace Vostok.Tracing.Abstractions
 {
+    /// <summary>
+    /// <para><see cref="ITracer"/> is an entry point to tracing for applications and instrumentation libraries. See <see cref="CurrentContext"/> and <see cref="BeginSpan"/> for details.</para>
+    /// <para>Implementations of this interface are expected to be thread-safe.</para>
+    /// </summary>
     [PublicAPI]
     public interface ITracer
     {
