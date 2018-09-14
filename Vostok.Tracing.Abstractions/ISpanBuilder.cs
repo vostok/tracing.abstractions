@@ -33,6 +33,11 @@ namespace Vostok.Tracing.Abstractions
     public interface ISpanBuilder : IDisposable
     {
         /// <summary>
+        /// Returns current state of the constructed span.
+        /// </summary>
+        ISpan CurrentSpan { get; }
+
+        /// <summary>
         /// <para>Set the annotation with given <paramref name="key"/> and <paramref name="value"/> in constructed span's <see cref="ISpan.Annotations"/>.</para>
         /// <para>By default, existing annotations are overwritten with provided values. This behaviour can be changed with <paramref name="allowOverwrite"/> parameter.</para>
         /// <para>Has no effect when called after <see cref="ISpanBuilder.Dispose"/>.</para>
