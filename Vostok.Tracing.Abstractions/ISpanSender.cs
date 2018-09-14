@@ -8,6 +8,10 @@ namespace Vostok.Tracing.Abstractions
     [PublicAPI]
     public interface ISpanSender
     {
-        SpanSendResult Send([NotNull] ISpan span);
+        /// <summary>
+        /// <para>Schedules given <paramref name="span"/> to be sent to an external storage in a fire-and-forget manner.</para>
+        /// <para>Error handling, retrying and buffering are delegated to implementations.</para>
+        /// </summary>
+        void Send([NotNull] ISpan span);
     }
 }
