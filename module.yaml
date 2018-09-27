@@ -10,6 +10,8 @@ notests *default:
 
   deps:
     - vostok.devtools
+    - vostok.commons.formatting/src
+    - vostok.commons.collections/src
 
 full-build > notests:
   build:
