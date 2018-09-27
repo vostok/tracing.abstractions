@@ -19,8 +19,6 @@
     <Description>Vostok.Tracing.Abstractions</Description>
   </PropertyGroup>
 
-  <Import Project="..\..\vostok.commons.formatting\ObjectValueFormatter.props" />
-
   <PropertyGroup>
     <PackageProjectUrl>https://github.com/vostok/tracing.abstractions</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/tracing.abstractions/blob/master/LICENSE</PackageLicenseUrl>

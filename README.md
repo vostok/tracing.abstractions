@@ -48,7 +48,7 @@ Every span consists of following fields:
   * Always measured with the same clock as `BeginTimestamp`. This allows to derive span duration as a difference between `EndTimestamp` and `BeginTimestamp`.
   * May be absent for a special kind of 'endless' spans described further.
   
-* `Annotations` — payload in key-value format (string --> string). Keys are case-sensitive.
+* `Annotations` — payload in key-value format (string --> object). Keys are case-sensitive.
 
 <br/>
 

@@ -43,8 +43,8 @@ namespace Vostok.Tracing.Abstractions
         [CanBeNull] DateTimeOffset? EndTimestamp { get; }
 
         /// <summary>
-        /// Span payload in key-value string format. Keys are case-sensitive. See <see cref="WellKnownAnnotations"/> for examples of annotations content.
+        /// Span payload in key-value format. Keys are case-sensitive. See <see cref="WellKnownAnnotations"/> for examples of annotations content.
         /// </summary>
-        [NotNull] IReadOnlyDictionary<string, string> Annotations { get; }
+        [NotNull] IReadOnlyDictionary<string, object> Annotations { get; }
     }
 }
