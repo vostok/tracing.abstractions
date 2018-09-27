@@ -82,15 +82,15 @@ namespace Vostok.Tracing.Abstractions.Tests
         {
             var counter = 0;
 
-            enrichedTracer = baseTracer.WithAnnotation("key", () => (++counter).ToString(), true);
+            enrichedTracer = baseTracer.WithAnnotation("key", () => ++counter, true);
 
             enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key", "1", Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key", 1, Arg.Any<bool>());
 
             enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key", "2", Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key", 2, Arg.Any<bool>());
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace Vostok.Tracing.Abstractions.Tests
         public void WithAnnotations_should_return_a_tracer_that_adds_given_annotations_to_span()
         {
             enrichedTracer = baseTracer.WithAnnotations(
-                new Dictionary<string, string>
+                new Dictionary<string, object>
                 {
                     {"key1", "value1"},
                     {"key2", "value2"}
@@ -153,7 +153,7 @@ namespace Vostok.Tracing.Abstractions.Tests
         public void WithAnnotations_should_filter_out_null_values_by_default()
         {
             enrichedTracer = baseTracer.WithAnnotations(
-                new Dictionary<string, string>
+                new Dictionary<string, object>
                 {
                     {"key1", "value1"},
                     {"key2", null}
@@ -169,7 +169,7 @@ namespace Vostok.Tracing.Abstractions.Tests
         public void WithAnnotations_should_pass_null_values_when_asked_to()
         {
             enrichedTracer = baseTracer.WithAnnotations(
-                new Dictionary<string, string>
+                new Dictionary<string, object>
                 {
                     {"key1", "value1"},
                     {"key2", null}
@@ -186,7 +186,7 @@ namespace Vostok.Tracing.Abstractions.Tests
         public void WithAnnotations_should_return_pass_overwrite_flag_to_span_builder(bool allowOverwrite)
         {
             enrichedTracer = baseTracer.WithAnnotations(
-                new Dictionary<string, string>
+                new Dictionary<string, object>
                 {
                     {"key1", "value1"},
                     {"key2", "value2"}
@@ -217,19 +217,19 @@ namespace Vostok.Tracing.Abstractions.Tests
             enrichedTracer = baseTracer.WithAnnotations(
                 () => new[]
                 {
-                    ("key1", (++counter).ToString()),
-                    ("key2", (++counter).ToString())
+                    ("key1", ++counter as object),
+                    ("key2", ++counter as object)
                 });
 
             enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key1", "1", Arg.Any<bool>());
-            spanBuilder.Received().SetAnnotation("key2", "2", Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key1", 1, Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key2", 2, Arg.Any<bool>());
 
             enrichedTracer.BeginSpan();
 
-            spanBuilder.Received().SetAnnotation("key1", "3", Arg.Any<bool>());
-            spanBuilder.Received().SetAnnotation("key2", "4", Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key1", 3, Arg.Any<bool>());
+            spanBuilder.Received().SetAnnotation("key2", 4, Arg.Any<bool>());
         }
 
         [Test]
@@ -238,8 +238,8 @@ namespace Vostok.Tracing.Abstractions.Tests
             enrichedTracer = baseTracer.WithAnnotations(
                 () => new[]
                 {
-                    ("key1", null as string),
-                    ("key2", null as string)
+                    ("key1", null as object),
+                    ("key2", null as object)
                 });
 
             enrichedTracer.BeginSpan();
@@ -253,8 +253,8 @@ namespace Vostok.Tracing.Abstractions.Tests
             enrichedTracer = baseTracer.WithAnnotations(
                 () => new[]
                 {
-                    ("key1", null as string),
-                    ("key2", null as string)
+                    ("key1", null as object),
+                    ("key2", null as object)
                 }, allowNullValues: true);
 
             enrichedTracer.BeginSpan();
@@ -270,8 +270,8 @@ namespace Vostok.Tracing.Abstractions.Tests
             enrichedTracer = baseTracer.WithAnnotations(
                 () => new[]
                 {
-                    ("key1", "value1"),
-                    ("key2", "value2")
+                    ("key1", "value1" as object),
+                    ("key2", "value2" as object)
                 }, allowOverwrite);
 
             enrichedTracer.BeginSpan();

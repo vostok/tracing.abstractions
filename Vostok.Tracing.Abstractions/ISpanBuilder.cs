@@ -42,7 +42,7 @@ namespace Vostok.Tracing.Abstractions
         /// <para>By default, existing annotations are overwritten with provided values. This behaviour can be changed with <paramref name="allowOverwrite"/> parameter.</para>
         /// <para>Has no effect when called after <see cref="ISpanBuilder.Dispose"/>.</para>
         /// </summary>
-        void SetAnnotation([NotNull] string key, [CanBeNull] string value, bool allowOverwrite = true);
+        void SetAnnotation([NotNull] string key, [CanBeNull] object value, bool allowOverwrite = true);
 
         /// <summary>
         /// <para>Overrides constructed span's <see cref="ISpan.BeginTimestamp"/>.</para>
