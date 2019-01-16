@@ -16,7 +16,7 @@
 
   <PropertyGroup>
     <Title>Vostok.Tracing.Abstractions</Title>
-    <Description>Vostok.Tracing.Abstractions</Description>
+    <Description>A library with core tracing interfaces, such as ITracer and ISpan.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
