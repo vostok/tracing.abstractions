@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace Vostok.Tracing.Abstractions
 {
     /// <summary>
-    /// <para>A span represents any significant event or interaction in a distrubted system, such as HTTP request or database query.</para>
+    /// <para>A span represents any significant event or interaction in a distributed system, such as HTTP request or database query.</para>
     /// <para>A single span always describes a local event in a single process: an HTTP request usually produces two spans (client-side and server-side).</para>
     /// <para>Span is an atomic building block of traces: every span is marked with a <see cref="TraceId"/> of a trace it belongs to.</para>
     /// <para>Spans in a single trace form a tree through <see cref="ParentSpanId"/> links. Root span does not have a parent.</para>
