@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Vostok.Tracing.Abstractions
 {
     /// <summary>
-    /// A span sender that passes spans on to all of the base logs.
+    /// A span sender that passes spans to all of the base logs.
     /// </summary>
     [PublicAPI]
     public class CompositeSpanSender : ISpanSender
