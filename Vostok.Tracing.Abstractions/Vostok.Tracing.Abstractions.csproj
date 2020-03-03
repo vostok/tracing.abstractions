@@ -17,6 +17,7 @@
   <PropertyGroup>
     <PackageProjectUrl>https://github.com/vostok/tracing.abstractions</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/tracing.abstractions/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageReleaseNotes>https://github.com/vostok/tracing.abstractions/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <PackageTags>vostok vostok.tracing</PackageTags>
     <RepositoryUrl>https://github.com/vostok/tracing.abstractions</RepositoryUrl>
   </PropertyGroup>
