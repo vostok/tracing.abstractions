@@ -27,6 +27,12 @@ namespace Vostok.Tracing.Abstractions
             public const string Operation = "operation";
 
             /// <summary>
+            /// <para>Logical operation or event status.</para>
+            /// <para>See <see cref="WellKnownStatuses"/> for possible values.</para>
+            /// </summary>
+            public const string Status = "status";
+
+            /// <summary>
             /// DNS name of the host the span originated from.
             /// </summary>
             public const string Host = "host";
