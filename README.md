@@ -60,6 +60,7 @@ These are the annotations relevant for any span:
 |----|-----|
 | `kind` | Span kind. There are a number of predefined span kinds for common use cases (e.g. `http-request-server`). |
 | `operation` | Human-readable logical operation or event name (e.g. `create-user`). |
+| `status` | Logical operation or event status (`success`, `error`, or `warning`). Might not have operation-specific values. | `N/A` |
 | `application` | Name of the application the span originated from. |
 | `environment` | Name of the environment the span originated from. |
 | `host` | DNS name of the host the span originated from.  |
