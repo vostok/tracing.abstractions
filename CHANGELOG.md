@@ -1,3 +1,7 @@
+## 0.1.2 (03-03-2020):
+
+Added `status` annotation.
+
 ## 0.1.1 (16-01-2019):
 
 Added `CompositeSpanSender`.
