@@ -95,5 +95,27 @@ namespace Vostok.Tracing.Abstractions
             private const string QueuePrefix = "queue-";
             private const string QueueTaskPrefix = QueuePrefix + "task-";
         }
+
+        /// <summary>
+        /// <para>Spans that represent custom operations.</para>
+        /// <para>Relevant annotation sets: <see cref="WellKnownAnnotations.Common"/>, <see cref="WellKnownAnnotations.Custom"/>.</para>
+        /// </summary>
+        [PublicAPI]
+        public static class Custom
+        {
+            private const string CustomPrefix = "custom-";
+            
+            /// <summary>
+            /// <para>Spans that represent submitting some not HTTP request to an external service.</para>
+            /// <para>Relevant annotation sets: <see cref="WellKnownAnnotations.Common"/>, <see cref="WellKnownAnnotations.Custom.Request"/>, <see cref="WellKnownAnnotations.Custom.Response"/>.</para>
+            /// </summary>
+            public const string Request = CustomPrefix + "request";
+
+            /// <summary>
+            /// <para>Spans that represent custom server operations.</para>
+            /// <para>Relevant annotation sets: <see cref="WellKnownAnnotations.Common"/>, <see cref="WellKnownAnnotations.Custom.Operation"/>.</para>
+            /// </summary>
+            public const string Operation = CustomPrefix + "operation";
+        }
     }
 }
