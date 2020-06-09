@@ -104,12 +104,13 @@ namespace Vostok.Tracing.Abstractions
         public static class Custom
         {
             private const string CustomPrefix = "custom-";
+            private const string CustomRequestPrefix = CustomPrefix + "request-";
             
             /// <summary>
             /// <para>Spans that represent submitting some not HTTP request to an external service.</para>
             /// <para>Relevant annotation sets: <see cref="WellKnownAnnotations.Common"/>, <see cref="WellKnownAnnotations.Custom.Request"/>, <see cref="WellKnownAnnotations.Custom.Response"/>.</para>
             /// </summary>
-            public const string Request = CustomPrefix + "request";
+            public const string Client = CustomRequestPrefix + "client";
 
             /// <summary>
             /// <para>Spans that represent custom server operations.</para>
