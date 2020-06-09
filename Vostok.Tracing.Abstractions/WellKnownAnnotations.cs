@@ -250,7 +250,7 @@ namespace Vostok.Tracing.Abstractions
                 /// <summary>
                 /// Request body size in bytes.
                 /// </summary>
-                public const string RequestSize = CustomRequestPrefix + "size";
+                public const string Size = CustomRequestPrefix + "size";
             }
 
             /// <summary>
