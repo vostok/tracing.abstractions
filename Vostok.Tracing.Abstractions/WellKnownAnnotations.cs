@@ -220,5 +220,76 @@ namespace Vostok.Tracing.Abstractions
 
             private const string QueuePrefix = "queue.";
         }
+
+        /// <summary>
+        /// Annotations relevant to spans that represent custom operations.
+        /// </summary>
+        [PublicAPI]
+        public static class Custom
+        {
+            private const string CustomPrefix = "custom.";
+            
+            /// <summary>
+            /// Annotations that describe custom request properties and destination.
+            /// </summary>
+            [PublicAPI]
+            public static class Request
+            {
+                private const string CustomRequestPrefix = CustomPrefix + "request.";
+
+                /// <summary>
+                /// Name of the service to which request is sent.
+                /// </summary>
+                public const string TargetService = CustomRequestPrefix + "targetService";
+
+                /// <summary>
+                /// Name of the environment to which request is sent.
+                /// </summary>
+                public const string TargetEnvironment = CustomRequestPrefix + "targetEnvironment";
+
+                /// <summary>
+                /// Request body size in bytes.
+                /// </summary>
+                public const string RequestSize = CustomRequestPrefix + "size";
+            }
+
+            /// <summary>
+            /// Annotations that describe custom response properties.
+            /// </summary>
+            [PublicAPI]
+            public static class Response
+            {
+                private const string CustomResponsePrefix = CustomPrefix + "response.";
+                
+                /// <summary>
+                /// Response body size in bytes.
+                /// </summary>
+                public const string Size = CustomResponsePrefix + "size";
+
+                /// <summary>
+                /// Status of interaction (e.g. 'success', 'no-replicas', ...)
+                /// </summary>
+                public const string Status = CustomResponsePrefix + "status";
+            }
+
+            /// <summary>
+            /// Annotations that describe custom server operation properties.
+            /// </summary>
+            [PublicAPI]
+            public static class Operation
+            {
+                private const string CustomOperationPrefix = CustomPrefix + "operation.";
+
+                /// <summary>
+                /// Processed data size in bytes.
+                /// </summary>
+                public const string Size = CustomOperationPrefix + "size";
+
+                /// <summary>
+                /// Status of operation (e.g. 'success', 'no-replicas', ...)
+                /// </summary>
+                public const string Status = CustomOperationPrefix + "status";
+            }
+        }
     }
 }
