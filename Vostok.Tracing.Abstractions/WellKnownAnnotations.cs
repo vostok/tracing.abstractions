@@ -228,15 +228,13 @@ namespace Vostok.Tracing.Abstractions
         public static class Custom
         {
             private const string CustomPrefix = "custom.";
-            
+
             /// <summary>
             /// Annotations that describe custom request properties and destination.
             /// </summary>
             [PublicAPI]
             public static class Request
             {
-                private const string CustomRequestPrefix = CustomPrefix + "request.";
-
                 /// <summary>
                 /// Name of the service to which request is sent.
                 /// </summary>
@@ -251,6 +249,13 @@ namespace Vostok.Tracing.Abstractions
                 /// Request body size in bytes.
                 /// </summary>
                 public const string Size = CustomRequestPrefix + "size";
+
+                /// <summary>
+                /// Replica name.
+                /// </summary>
+                public const string Replica = CustomRequestPrefix + "replica";
+
+                private const string CustomRequestPrefix = CustomPrefix + "request.";
             }
 
             /// <summary>
@@ -259,8 +264,6 @@ namespace Vostok.Tracing.Abstractions
             [PublicAPI]
             public static class Response
             {
-                private const string CustomResponsePrefix = CustomPrefix + "response.";
-                
                 /// <summary>
                 /// Response body size in bytes.
                 /// </summary>
@@ -270,6 +273,8 @@ namespace Vostok.Tracing.Abstractions
                 /// Status of interaction (e.g. 'success', 'no-replicas', ...)
                 /// </summary>
                 public const string Status = CustomResponsePrefix + "status";
+
+                private const string CustomResponsePrefix = CustomPrefix + "response.";
             }
 
             /// <summary>
@@ -278,8 +283,6 @@ namespace Vostok.Tracing.Abstractions
             [PublicAPI]
             public static class Operation
             {
-                private const string CustomOperationPrefix = CustomPrefix + "operation.";
-
                 /// <summary>
                 /// Processed data size in bytes.
                 /// </summary>
@@ -289,6 +292,8 @@ namespace Vostok.Tracing.Abstractions
                 /// Status of operation (e.g. 'success', 'no-replicas', ...)
                 /// </summary>
                 public const string Status = CustomOperationPrefix + "status";
+
+                private const string CustomOperationPrefix = CustomPrefix + "operation.";
             }
         }
     }
