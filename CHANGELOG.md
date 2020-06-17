@@ -1,3 +1,7 @@
+## 0.1.3 (17-06-2020):
+
+Added custom operation, client and cluster spans.
+
 ## 0.1.2 (03-03-2020):
 
 Added `status` annotation.
