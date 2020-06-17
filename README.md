@@ -14,6 +14,10 @@ Distributed tracing allows to reconstruct the history of the logical operation s
     * [HTTP client (direct)](#http-client-direct)
     * [HTTP client (cluster)](#http-client-cluster)
     * [HTTP server](#http-server)
+  * [Custom (not HTTP) requests](#custom-not-http-requests)
+    * [Custom (not HTTP) client (direct)](#custom-not-http-client-direct)
+    * [Custom (not HTTP) client (cluster)](#custom-not-http-client-cluster)
+  * [Custom operations](#custom-operations)
   * [Database requests](#database-requests)
     * [Cassandra](#cassandra)
     * [MongoDB](#mongodb)
@@ -123,6 +127,59 @@ Handling an HTTP request on server.
 | `kind` | See [common annotations](#common-annotations). | `http-request-server` |
 | `http.client.name` | Name of the client application that sent the request. | `N/A` |
 | `http.client.address` | Address of the client application instance (host name or IP address).  | `N/A` |
+
+<br/>
+<br/>
+
+### Custom (not HTTP) requests
+
+Common annotations for all spans related to custom requests:
+
+| Name | Description | Default value |
+|----|-----|----|
+| `operation` | See [common annotations](#common-annotations). | `N/A` |
+| `status` | See [common annotations](#common-annotations). | `N/A` |
+| `custom.response.status` | Custom request-specific status. | `N/A` |
+| `custom.request.size` | Request size in bytes. | `N/A` |
+| `custom.response.size` | Response size in bytes. | `N/A` |
+| `custom.request.targetService` | Name of the service to which request is sent. | `N/A` |
+| `custom.request.targetEnvironment` | Name of the environment to which request is sent. | `N/A` |
+
+<br/>
+
+#### Custom (not HTTP) client (direct)
+
+Submitting custom request directly to a service replica.
+
+| Name | Description | Default value |
+|----|-----|----|
+| `kind` | See [common annotations](#common-annotations).  | `custom-request-client` |
+| `custom.request.replica` | Name of the replica to which request is sent. | `N/A` |
+
+<br/>
+
+#### Custom (not HTTP) client (cluster)
+
+Submitting custom request to a clustered application with several replicas.
+
+| Name | Description | Default value |
+|----|-----|----|
+| `kind` | See [common annotations](#common-annotations).  | `custom-request-cluster` |
+
+<br/>
+<br/>
+
+### Custom operations
+
+Performing custom server operation.
+
+| Name | Description | Default value |
+|----|-----|----|
+| `kind` | See [common annotations](#common-annotations).  | `custom-operation` |
+| `operation` | See [common annotations](#common-annotations). | `N/A` |
+| `status` | See [common annotations](#common-annotations). | `N/A` |
+| `custom.operation.status` | Custom operation-specific status. | `N/A` |
+| `custom.operation.size` | Processed data size in bytes. | `N/A` |
 
 <br/>
 <br/>
