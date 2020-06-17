@@ -95,5 +95,33 @@ namespace Vostok.Tracing.Abstractions
             private const string QueuePrefix = "queue-";
             private const string QueueTaskPrefix = QueuePrefix + "task-";
         }
+
+        /// <summary>
+        /// <para>Spans that represent custom operations.</para>
+        /// <para>Relevant annotation sets: <see cref="WellKnownAnnotations.Common"/>, <see cref="WellKnownAnnotations.Custom"/>.</para>
+        /// </summary>
+        [PublicAPI]
+        public static class Custom
+        {
+            /// <summary>
+            /// <para>Spans that represent submitting some not HTTP request to an external service replica.</para>
+            /// <para>Relevant annotation sets: <see cref="WellKnownAnnotations.Common"/>, <see cref="WellKnownAnnotations.Custom.Request"/>, <see cref="WellKnownAnnotations.Custom.Response"/>.</para>
+            /// </summary>
+            public const string Client = CustomRequestPrefix + "client";
+
+            /// <summary>
+            /// <para>Spans that represent submitting some not HTTP request to an external service with several replicas..</para>
+            /// <para>Relevant annotation sets: <see cref="WellKnownAnnotations.Common"/>, <see cref="WellKnownAnnotations.Custom.Request"/>, <see cref="WellKnownAnnotations.Custom.Response"/>.</para>
+            /// </summary>
+            public const string Cluster = CustomRequestPrefix + "cluster";
+
+            /// <summary>
+            /// <para>Spans that represent custom server operations.</para>
+            /// <para>Relevant annotation sets: <see cref="WellKnownAnnotations.Common"/>, <see cref="WellKnownAnnotations.Custom.Operation"/>.</para>
+            /// </summary>
+            public const string Operation = CustomPrefix + "operation";
+            private const string CustomPrefix = "custom-";
+            private const string CustomRequestPrefix = CustomPrefix + "request-";
+        }
     }
 }
