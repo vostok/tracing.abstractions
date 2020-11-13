@@ -289,6 +289,16 @@ namespace Vostok.Tracing.Abstractions
                 public const string Size = CustomOperationPrefix + "size";
 
                 /// <summary>
+                /// Name of the service with which this operation is associated.
+                /// </summary>
+                public const string TargetService = CustomOperationPrefix + "targetService";
+
+                /// <summary>
+                /// Name of the environment with which this operation is associated.
+                /// </summary>
+                public const string TargetEnvironment = CustomOperationPrefix + "targetEnvironment";
+
+                /// <summary>
                 /// Status of operation (e.g. 'success', 'no-replicas', ...)
                 /// </summary>
                 public const string Status = CustomOperationPrefix + "status";
