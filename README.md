@@ -180,6 +180,8 @@ Performing custom server operation.
 | `status` | See [common annotations](#common-annotations). | `N/A` |
 | `custom.operation.status` | Custom operation-specific status. | `N/A` |
 | `custom.operation.size` | Processed data size in bytes. | `N/A` |
+| `custom.operation.targetService` | Name of the service with whish this operation is associated. | `application` |
+| `custom.operation.targetEnvironment` | Name of the environment with whish this operation is associated. | `environment` |
 
 <br/>
 <br/>
