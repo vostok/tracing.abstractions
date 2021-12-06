@@ -1,3 +1,7 @@
+## 0.1.5 (06-12-2021):
+
+Added `net6.0` target.
+
 ## 0.1.4 (20-11-2020):
 
 Add target annotations for custom operation span.
