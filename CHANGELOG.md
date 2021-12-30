@@ -1,4 +1,4 @@
-## 0.1.7 (06-12-2021):
+## 0.1.7 (30-12-2021):
 
 Speed up WithAnnotationsTracer ~x5.4 times in case of Dictionary argument in WithAnnotationTracerExtensions.WithAnnotations extension.
 
