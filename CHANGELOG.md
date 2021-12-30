@@ -1,3 +1,7 @@
+## 0.1.7 (06-12-2021):
+
+Speed up WithAnnotationsTracer ~x5.4 times in case of Dictionary argument in WithAnnotationTracerExtensions.WithAnnotations extension.
+
 ## 0.1.6 (06-12-2021):
 
 Added `net6.0` target.
