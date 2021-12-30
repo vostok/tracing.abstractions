@@ -8,6 +8,8 @@ namespace Vostok.Tracing.Abstractions
     [PublicAPI]
     public static class WithAnnotationTracerExtensions
     {
+        private static Func<KeyValuePair<string, object>, (string, object)> selector = Selector;
+
         /// <summary>
         /// <para>Returns a wrapper tracer that adds a static annotation with given <paramref name="key"/> and <paramref name="value"/> to each <see cref="ISpanBuilder"/> before handing it to the calling code.</para>
         /// <para>By default, existing annotations are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
@@ -37,7 +39,10 @@ namespace Vostok.Tracing.Abstractions
         [Pure]
         public static ITracer WithAnnotations(this ITracer tracer, [NotNull] IReadOnlyDictionary<string, object> annotations, bool allowOverwrite = false, bool allowNullValues = false)
         {
-            return new WithAnnotationsTracer(tracer, () => annotations?.Select(pair => (pair.Key, pair.Value)), allowOverwrite, allowNullValues);
+            //Annotations Dictionary is readonly so we can pre-calculate its transformation to IEnumerable.
+            var enumerable = annotations.Select(selector).ToArray();
+
+            return tracer.WithAnnotations(() => enumerable, allowOverwrite, allowNullValues);
         }
 
         /// <summary>
@@ -49,6 +54,11 @@ namespace Vostok.Tracing.Abstractions
         public static ITracer WithAnnotations(this ITracer tracer, [NotNull] Func<IEnumerable<(string, object)>> annotations, bool allowOverwrite = false, bool allowNullValues = false)
         {
             return new WithAnnotationsTracer(tracer, annotations, allowOverwrite, allowNullValues);
+        }
+
+        private static (string, object) Selector(KeyValuePair<string, object> pair)
+        {
+            return (pair.Key, pair.Value);
         }
 
         private class WithAnnotationTracer : ITracer
