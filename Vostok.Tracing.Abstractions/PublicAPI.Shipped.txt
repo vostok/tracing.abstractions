@@ -1,0 +1,114 @@
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Common.Application = "application" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Common.Component = "component" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Common.Environment = "environment" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Common.Host = "host" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Common.Kind = "kind" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Common.Operation = "operation" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Common.Status = "status" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Operation.Size = "custom.operation.size" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Operation.Status = "custom.operation.status" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Operation.TargetEnvironment = "custom.operation.targetEnvironment" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Operation.TargetService = "custom.operation.targetService" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Request.Replica = "custom.request.replica" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Request.Size = "custom.request.size" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Request.TargetEnvironment = "custom.request.targetEnvironment" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Request.TargetService = "custom.request.targetService" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Response.Size = "custom.response.size" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Response.Status = "custom.response.status" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Database.Instance = "db.instance" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Database.Type = "db.type" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Client.Address = "http.client.address" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Client.Name = "http.client.name" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Cluster.Status = "http.cluster.status" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Cluster.Strategy = "http.cluster.strategy" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Request.Method = "http.request.method" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Request.Size = "http.request.size" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Request.TargetEnvironment = "http.request.targetEnvironment" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Request.TargetService = "http.request.targetService" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Request.Url = "http.request.url" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Response.Code = "http.response.code" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Response.Size = "http.response.size" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Queue.ActionResult = "queue.actionResult" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Queue.ExecutionResult = "queue.executionResult" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Queue.ExternalTraceId = "queue.externalTraceId" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Queue.ProducerTraceId = "queue.producerTraceId" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Queue.TaskId = "queue.taskId" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Queue.TaskTraceId = "queue.taskTraceId" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Queue.Topic = "queue.topic" -> string
+const Vostok.Tracing.Abstractions.WellKnownAnnotations.Queue.Type = "queue.type" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.Custom.Client = "custom-request-client" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.Custom.Cluster = "custom-request-cluster" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.Custom.Operation = "custom-operation" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.Database.Request = "db-request" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.HttpRequest.Client = "http-request-client" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.HttpRequest.Cluster = "http-request-cluster" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.HttpRequest.Server = "http-request-server" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.Queue.Consumer = "queue-consumer" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.Queue.Manager = "queue-manager" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.Queue.Producer = "queue-producer" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.Queue.TaskLifecycle = "queue-task-lifecycle" -> string
+const Vostok.Tracing.Abstractions.WellKnownSpanKinds.Queue.TaskLifecycleEvent = "queue-task-lifecycle-event" -> string
+const Vostok.Tracing.Abstractions.WellKnownStatuses.Error = "error" -> string
+const Vostok.Tracing.Abstractions.WellKnownStatuses.Success = "success" -> string
+const Vostok.Tracing.Abstractions.WellKnownStatuses.Warning = "warning" -> string
+static Vostok.Tracing.Abstractions.TracerProvider.Configure(Vostok.Tracing.Abstractions.ITracer tracer, bool canOverwrite = false) -> void
+static Vostok.Tracing.Abstractions.TracerProvider.Get() -> Vostok.Tracing.Abstractions.ITracer
+static Vostok.Tracing.Abstractions.TracerProvider.IsConfigured.get -> bool
+static Vostok.Tracing.Abstractions.WithAnnotationTracerExtensions.WithAnnotation(this Vostok.Tracing.Abstractions.ITracer tracer, string key, object value, bool allowOverwrite = false) -> Vostok.Tracing.Abstractions.ITracer
+static Vostok.Tracing.Abstractions.WithAnnotationTracerExtensions.WithAnnotation(this Vostok.Tracing.Abstractions.ITracer tracer, string key, System.Func<object> value, bool allowOverwrite = false, bool allowNullValues = false) -> Vostok.Tracing.Abstractions.ITracer
+static Vostok.Tracing.Abstractions.WithAnnotationTracerExtensions.WithAnnotations(this Vostok.Tracing.Abstractions.ITracer tracer, System.Collections.Generic.IReadOnlyDictionary<string, object> annotations, bool allowOverwrite = false, bool allowNullValues = false) -> Vostok.Tracing.Abstractions.ITracer
+static Vostok.Tracing.Abstractions.WithAnnotationTracerExtensions.WithAnnotations(this Vostok.Tracing.Abstractions.ITracer tracer, System.Func<System.Collections.Generic.IEnumerable<(string, object)>> annotations, bool allowOverwrite = false, bool allowNullValues = false) -> Vostok.Tracing.Abstractions.ITracer
+Vostok.Tracing.Abstractions.CompositeSpanSender
+Vostok.Tracing.Abstractions.CompositeSpanSender.CompositeSpanSender(params Vostok.Tracing.Abstractions.ISpanSender[] baseSpanSenders) -> void
+Vostok.Tracing.Abstractions.CompositeSpanSender.Send(Vostok.Tracing.Abstractions.ISpan span) -> void
+Vostok.Tracing.Abstractions.DevNullSpanSender
+Vostok.Tracing.Abstractions.DevNullSpanSender.DevNullSpanSender() -> void
+Vostok.Tracing.Abstractions.DevNullSpanSender.Send(Vostok.Tracing.Abstractions.ISpan span) -> void
+Vostok.Tracing.Abstractions.DevNullTracer
+Vostok.Tracing.Abstractions.DevNullTracer.BeginSpan() -> Vostok.Tracing.Abstractions.ISpanBuilder
+Vostok.Tracing.Abstractions.DevNullTracer.CurrentContext.get -> Vostok.Tracing.Abstractions.TraceContext
+Vostok.Tracing.Abstractions.DevNullTracer.CurrentContext.set -> void
+Vostok.Tracing.Abstractions.DevNullTracer.DevNullTracer() -> void
+Vostok.Tracing.Abstractions.ISpan
+Vostok.Tracing.Abstractions.ISpan.Annotations.get -> System.Collections.Generic.IReadOnlyDictionary<string, object>
+Vostok.Tracing.Abstractions.ISpan.BeginTimestamp.get -> System.DateTimeOffset
+Vostok.Tracing.Abstractions.ISpan.EndTimestamp.get -> System.DateTimeOffset?
+Vostok.Tracing.Abstractions.ISpan.ParentSpanId.get -> System.Guid?
+Vostok.Tracing.Abstractions.ISpan.SpanId.get -> System.Guid
+Vostok.Tracing.Abstractions.ISpan.TraceId.get -> System.Guid
+Vostok.Tracing.Abstractions.ISpanBuilder
+Vostok.Tracing.Abstractions.ISpanBuilder.CurrentSpan.get -> Vostok.Tracing.Abstractions.ISpan
+Vostok.Tracing.Abstractions.ISpanBuilder.SetAnnotation(string key, object value, bool allowOverwrite = true) -> void
+Vostok.Tracing.Abstractions.ISpanBuilder.SetBeginTimestamp(System.DateTimeOffset timestamp) -> void
+Vostok.Tracing.Abstractions.ISpanBuilder.SetEndTimestamp(System.DateTimeOffset? timestamp) -> void
+Vostok.Tracing.Abstractions.ISpanSender
+Vostok.Tracing.Abstractions.ISpanSender.Send(Vostok.Tracing.Abstractions.ISpan span) -> void
+Vostok.Tracing.Abstractions.ITracer
+Vostok.Tracing.Abstractions.ITracer.BeginSpan() -> Vostok.Tracing.Abstractions.ISpanBuilder
+Vostok.Tracing.Abstractions.ITracer.CurrentContext.get -> Vostok.Tracing.Abstractions.TraceContext
+Vostok.Tracing.Abstractions.ITracer.CurrentContext.set -> void
+Vostok.Tracing.Abstractions.TraceContext
+Vostok.Tracing.Abstractions.TraceContext.SpanId.get -> System.Guid
+Vostok.Tracing.Abstractions.TraceContext.TraceContext(System.Guid traceId, System.Guid spanId) -> void
+Vostok.Tracing.Abstractions.TraceContext.TraceId.get -> System.Guid
+Vostok.Tracing.Abstractions.TracerProvider
+Vostok.Tracing.Abstractions.WellKnownAnnotations
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Common
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Operation
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Request
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Custom.Response
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Database
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Http
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Client
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Cluster
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Request
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Http.Response
+Vostok.Tracing.Abstractions.WellKnownAnnotations.Queue
+Vostok.Tracing.Abstractions.WellKnownSpanKinds
+Vostok.Tracing.Abstractions.WellKnownSpanKinds.Custom
+Vostok.Tracing.Abstractions.WellKnownSpanKinds.Database
+Vostok.Tracing.Abstractions.WellKnownSpanKinds.HttpRequest
+Vostok.Tracing.Abstractions.WellKnownSpanKinds.Queue
+Vostok.Tracing.Abstractions.WellKnownStatuses
+Vostok.Tracing.Abstractions.WithAnnotationTracerExtensions
