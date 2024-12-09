@@ -1,3 +1,7 @@
+## 0.1.8 (09-12-2024): 
+
+Bump NuGet deps versions
+
 ## 0.1.7 (30-12-2021):
 
 Speed up WithAnnotationsTracer ~x5.4 times in case of Dictionary argument in WithAnnotationTracerExtensions.WithAnnotations extension.
