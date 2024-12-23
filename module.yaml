@@ -7,11 +7,34 @@ notests *default:
 
   install:
     - Vostok.Tracing.Abstractions/bin/Release/netstandard2.0/Vostok.Tracing.Abstractions.dll
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Tracing.Abstractions/bin/Release/netstandard2.0/Vostok.Tracing.Abstractions.dll
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Tracing.Abstractions/bin/Release/net6.0/Vostok.Tracing.Abstractions.dll
+        - target-framework: "net8.0"
+          libraries:
+            - Vostok.Tracing.Abstractions/bin/Release/net8.0/Vostok.Tracing.Abstractions.dll
 
   deps:
     - vostok.devtools
 
 full-build > notests:
+  install:
+    - Vostok.Tracing.Abstractions/bin/Release/netstandard2.0/Vostok.Tracing.Abstractions.dll
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Tracing.Abstractions/bin/Release/netstandard2.0/Vostok.Tracing.Abstractions.dll
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Tracing.Abstractions/bin/Release/net6.0/Vostok.Tracing.Abstractions.dll
+        - target-framework: "net8.0"
+          libraries:
+            - Vostok.Tracing.Abstractions/bin/Release/net8.0/Vostok.Tracing.Abstractions.dll
+  
   deps:
     - -vostok.devtools
     - vostok.devtools@with-net6.0
